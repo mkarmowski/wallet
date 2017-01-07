@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^logout-then-login/$', auth_views.logout_then_login, name='logout_then_login'),
     url(r'^$', views.main_view, name='main'),
+    url(r'^password-change/$', auth_views.password_change, name='password_change'),
+    url(r'^password-change/done/$', auth_views.password_change_done, name='password_change_done'),
 ]

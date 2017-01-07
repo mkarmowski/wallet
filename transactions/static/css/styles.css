@@ -72,7 +72,7 @@ a.readmore:hover{background-color:#2f2f2f; background-image:none; text-shadow:0 
 
 /* Footer */
 
-#footerwrap{width:100%; margin:20px 0 0 0; padding:30px 0; background:#2d2d2d url("../images/footerbg.jpg");}
+#footerwrap{position:absolute, bottom:0; width:100%; margin:20px 0 0 0; padding:30px 0; background:#2d2d2d url("../images/footerbg.jpg");}
 #mainfooter{text-shadow:0 0 1px #000;}
 #mainfooter nav{float:left; font-style:italic; font-size:1.1em;}
 #mainfooter nav ul{margin:0; padding:0; list-style:none;}
@@ -187,4 +187,12 @@ a.readmore:hover{background-color:#2f2f2f; background-image:none; text-shadow:0 
 #mainfooter li{margin:0 6px 0 0;}
 #mainfooter li:last-child{margin-right:0;}
 .copyright{color:#b8b8b8; margin-bottom:0;}
+}
+
+input[type=submit], a.button {
+    font-weight:bold;
+    background:#4086c6;
+    color:#fff;
+    padding:5px 10px;
+    font-size:11px;
 }

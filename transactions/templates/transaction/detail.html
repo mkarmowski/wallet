@@ -1,1 +1,17 @@
 {% extends 'base.html' %}
+
+{% block title %}Transaction: {{ transaction.name }}{% endblock %}
+
+{% block content %}
+    <div class="transaction-detail">
+        <p>
+            <h1><strong>{{ transaction.name }}</strong></h1>
+            <strong>Wallet:</strong> {{ transaction.wallet }}<br>
+            <strong>Category:</strong> {{ transaction.category }}<br>
+            <strong>Description:</strong> {{ transaction.description }}<br>
+            <strong>Date:</strong> {{ transaction.date }}<br>
+            <strong>Amount:</strong> {{ transaction.amount }}<br>
+            <strong>Notes:</strong> {{ transaction.notes }}<br>
+        </p>
+    </div>
+{% endblock %}

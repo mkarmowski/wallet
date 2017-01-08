@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -39,11 +40,14 @@ class Category(models.Model):
 class Transaction(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     wallet = models.ForeignKey(Wallet, null=True, blank=True)
     category = models.ForeignKey(Category,
                                  related_name='transactions',
                                  null=True,
                                  blank=True)
+    date = models.DateTimeField(verbose_name='Date of transaction',
+                                default=datetime.datetime.now())
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -51,10 +55,9 @@ class Transaction(models.Model):
 
     class Meta:
         ordering = ('-created',)
-        index_together = (('id', 'slug'),)
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('wallet:transaction', args=[self.id, self.slug])
+        return reverse('wallet:transaction_details', args=[self.id])

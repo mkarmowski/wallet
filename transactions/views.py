@@ -5,15 +5,17 @@ from .models import Transaction, Category, Wallet
 
 
 @login_required
-def transaction_detail(request, id):
-    transaction = get_object_or_404(Transaction, pk=id)
-    return render(request, 'transaction/detail.html', {'transaction': transaction})
+def transaction_list(request):
+    current_user = request.user
+    transactions = Transaction.objects.filter(user=current_user)
+    # transactions = Transaction.objects.all ()
+    return render(request, 'transaction/list.html', {'transactions': transactions})
 
 
 @login_required
-def transaction_list(request):
-    transactions = Transaction.objects.all()
-    return render(request, 'transaction/list.html', {'transactions': transactions})
+def transaction_detail(request, id):
+    transaction = get_object_or_404(Transaction, id=id)
+    return render(request, 'transaction/detail.html', {'transaction': transaction})
 
 
 @login_required

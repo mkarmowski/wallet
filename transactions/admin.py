@@ -1,10 +1,16 @@
 from django.contrib import admin
-from .models import Category, Transaction
+from .models import Category, Transaction, Wallet
+
+
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ['name', 'balance', 'user']
+    list_filter = ['name', ]
+admin.site.register(Wallet, WalletAdmin)
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
-    list_filter = ['name',]
+    list_filter = ['name', ]
 admin.site.register(Category, CategoryAdmin)
 
 

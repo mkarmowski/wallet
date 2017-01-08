@@ -1,6 +1,23 @@
-from decimal import Decimal
+from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
+
+
+class Wallet(models.Model):
+    name = models.CharField(max_length=100, db_index=True)
+    balance = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    description = models.TextField(blank=True, max_length=500)
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('wallet:wallets_list', args=self.id)
 
 
 class Category(models.Model):
@@ -22,9 +39,10 @@ class Category(models.Model):
 class Transaction(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
+    wallet = models.ForeignKey(Wallet, null=False, blank=True)
     category = models.ForeignKey(Category,
                                  related_name='transactions',
-                                 null=True,
+                                 null=False,
                                  blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

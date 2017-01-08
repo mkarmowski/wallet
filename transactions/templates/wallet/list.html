@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Your wallets{% endblock %}
+
+{% block content %}
+    <h1>Your Wallets</h1>
+    <div class="wallet-list">
+        {% for wallet in wallets %}
+            <div class="wallet">
+                <a href="{{ wallet.get_absolute_url }}">{{ wallet.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

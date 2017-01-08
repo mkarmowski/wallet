@@ -17,7 +17,7 @@ class Wallet(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('wallet:wallets_list', args=self.id)
+        return reverse('wallet:wallet_details', args=[self.id])
 
 
 class Category(models.Model):
@@ -39,10 +39,10 @@ class Category(models.Model):
 class Transaction(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
-    wallet = models.ForeignKey(Wallet, null=False, blank=True)
+    wallet = models.ForeignKey(Wallet, null=True, blank=True)
     category = models.ForeignKey(Category,
                                  related_name='transactions',
-                                 null=False,
+                                 null=True,
                                  blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

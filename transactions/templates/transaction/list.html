@@ -14,3 +14,9 @@
         {% endfor %}
     </div>
 {% endblock %}
+
+{% block menu %}
+    <div>
+        <a href="{% url 'wallet:transaction_create' %}">Create new transaction</a>
+    </div>
+{% endblock %}

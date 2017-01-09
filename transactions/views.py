@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from .forms import WalletCreateForm
+from .forms import WalletCreateForm, TransactionCreateForm
 from .models import Transaction, Category, Wallet
 
 
@@ -35,7 +35,7 @@ def wallet_details(request, id):
 
 
 @login_required
-def wallet_create(request,):
+def wallet_create(request):
     if request.method == 'POST':
         wallet_create_form = WalletCreateForm(request.POST)
         if wallet_create_form.is_valid():
@@ -46,3 +46,18 @@ def wallet_create(request,):
     else:
         wallet_create_form = WalletCreateForm()
     return render(request, 'wallet/create.html', {'wallet_form': wallet_create_form})
+
+
+@login_required
+def transaction_create(request):
+    if request.method == 'POST':
+        transaction_create_form = TransactionCreateForm(request.POST)
+        if transaction_create_form.is_valid():
+            new_transaction = transaction_create_form.save(commit=False)
+            new_transaction.user = request.user
+            new_transaction.save()
+            return render(request, 'transaction/done.html')
+    else:
+        transaction_create_form = TransactionCreateForm()
+    return render(request, 'transaction/create.html',
+                  {'transaction_form': transaction_create_form})

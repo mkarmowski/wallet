@@ -4,6 +4,11 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 
+TRANSACTION_CHOICES = (
+    ('income', 'Income'),
+    ('expense', 'Expense'),
+)
+
 
 class Wallet(models.Model):
     name = models.CharField(max_length=100, db_index=True)
@@ -40,6 +45,7 @@ class Category(models.Model):
 class Transaction(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
+    type = models.CharField(choices=TRANSACTION_CHOICES, max_length=10)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     wallet = models.ForeignKey(Wallet, null=True, blank=True)
     category = models.ForeignKey(Category,

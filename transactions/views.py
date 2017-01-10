@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from .forms import WalletCreateForm, TransactionCreateForm
@@ -50,6 +49,7 @@ def wallet_create(request):
 
 @login_required
 def transaction_create(request):
+    current_user = request.user
     if request.method == 'POST':
         transaction_create_form = TransactionCreateForm(request.POST)
         if transaction_create_form.is_valid():
@@ -58,6 +58,6 @@ def transaction_create(request):
             new_transaction.save()
             return render(request, 'transaction/done.html')
     else:
-        transaction_create_form = TransactionCreateForm()
+        transaction_create_form = TransactionCreateForm(user=current_user)
     return render(request, 'transaction/create.html',
                   {'transaction_form': transaction_create_form})

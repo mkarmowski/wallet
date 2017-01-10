@@ -1,5 +1,5 @@
 import datetime
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.text import slugify
@@ -13,7 +13,7 @@ TRANSACTION_CHOICES = (
 class Wallet(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     balance = models.DecimalField(default=0, max_digits=10, decimal_places=2)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(User, related_name='wallets')
     description = models.TextField(blank=True, max_length=500)
 
     class Meta:
@@ -46,7 +46,7 @@ class Transaction(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
     type = models.CharField(choices=TRANSACTION_CHOICES, max_length=10)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(User, related_name='transactions')
     wallet = models.ForeignKey(Wallet, null=True, blank=True)
     category = models.ForeignKey(Category,
                                  related_name='transactions',

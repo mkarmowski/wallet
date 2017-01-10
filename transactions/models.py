@@ -53,7 +53,7 @@ class Transaction(models.Model):
     slug = models.SlugField(max_length=100, db_index=True)
     type = models.CharField(choices=TRANSACTION_CHOICES, max_length=10)
     user = models.ForeignKey(User, related_name='transactions')
-    wallet = models.ForeignKey(Wallet, null=True, blank=True)
+    wallet = models.ForeignKey(Wallet, null=True, blank=True, related_name='transactions')
     category = models.ForeignKey(Category,
                                  related_name='transactions',
                                  null=True,

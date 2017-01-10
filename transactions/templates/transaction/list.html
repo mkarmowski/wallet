@@ -8,7 +8,7 @@
         {% for transaction in transactions %}
             <div class="transaction">
                 <strong><a href="{{ transaction.get_absolute_url }}">{{ transaction.name }}</a></strong><br>
-                Wallet: {{ transaction.wallet}}<br>
+                Wallet: {{ transaction.wallet }}<br>
                 Amount: ${{ transaction.amount }}
             </div><br>
         {% endfor %}

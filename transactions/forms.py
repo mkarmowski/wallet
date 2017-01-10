@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.models import User
+
 from .models import Wallet, Transaction, Category
 
 
@@ -26,6 +28,7 @@ class TransactionCreateForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(TransactionCreateForm, self).__init__(*args, **kwargs)
         self.fields['wallet'] = forms.ChoiceField(
-            choices=[(o.id, str(o)) for o in Wallet.objects.filter(user=user)])
+            choices=[(wallet.id, str(wallet)) for wallet in Wallet.objects.filter(user=user)])
+
 
 

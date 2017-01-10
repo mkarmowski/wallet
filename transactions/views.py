@@ -21,10 +21,12 @@ def transaction_detail(request, id):
 def transaction_create(request):
     current_user = request.user
     if request.method == 'POST':
-        transaction_create_form = TransactionCreateForm(request.POST)
+        Transaction.wallet = Wallet.objects.filter(user=current_user)
+        transaction_create_form = TransactionCreateForm(current_user, request.POST)
         if transaction_create_form.is_valid():
             new_transaction = transaction_create_form.save(commit=False)
             new_transaction.user = request.user
+            new_transaction.wallet = 1
             new_transaction.save()
             return render(request, 'transaction/done.html')
     else:
@@ -77,6 +79,7 @@ def category_details(request, id):
 
 @login_required
 def category_create(request):
+    user = request.user
     if request.method == 'POST':
         category_create_form = CategoryCreateForm(request.POST)
         if category_create_form.is_valid():

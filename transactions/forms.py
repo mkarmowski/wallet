@@ -27,8 +27,5 @@ class TransactionCreateForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super(TransactionCreateForm, self).__init__(*args, **kwargs)
-        self.fields['wallet'] = forms.ChoiceField(
-            choices=[(wallet.id, str(wallet)) for wallet in Wallet.objects.filter(user=user)])
-
-
-
+        self.fields['wallet'] = forms.ModelChoiceField(queryset=Wallet.objects.filter(user=user))
+        self.fields['category'] = forms.ModelChoiceField(queryset=Category.objects.filter(user=user))

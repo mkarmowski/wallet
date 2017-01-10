@@ -17,7 +17,7 @@ class Wallet(models.Model):
     description = models.TextField(blank=True, max_length=500)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('name', )
 
     def __str__(self):
         return self.name
@@ -32,7 +32,7 @@ class Category(models.Model):
     user = models.ForeignKey(User, related_name='categories')
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('name', )
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
@@ -58,7 +58,7 @@ class Transaction(models.Model):
                                  related_name='transactions',
                                  null=True,
                                  blank=True)
-    date = models.DateTimeField(verbose_name='Date of transaction',
+    date = models.DateField(verbose_name='Date of transaction',
                                 default=datetime.datetime.now())
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -66,7 +66,7 @@ class Transaction(models.Model):
     notes = models.TextField(max_length=250)
 
     class Meta:
-        ordering = ('-created',)
+        ordering = ('-created', )
 
     def __str__(self):
         return self.name

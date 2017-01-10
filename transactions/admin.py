@@ -19,7 +19,7 @@ admin.site.register(Category, CategoryAdmin)
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'category', 'created',
-                    'updated', 'amount']
+                    'updated', 'amount', 'wallet']
     list_filter = ['name', 'category', 'created']
 
     def get_prepopulated_fields(self, request, obj=None):

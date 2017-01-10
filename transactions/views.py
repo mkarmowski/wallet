@@ -17,20 +17,21 @@ def transaction_detail(request, id):
     return render(request, 'transaction/detail.html', {'transaction': transaction})
 
 
+
 @login_required
 def transaction_create(request):
     current_user = request.user
     if request.method == 'POST':
-        Transaction.wallet = Wallet.objects.filter(user=current_user)
         transaction_create_form = TransactionCreateForm(current_user, request.POST)
         if transaction_create_form.is_valid():
             new_transaction = transaction_create_form.save(commit=False)
             new_transaction.user = request.user
-            new_transaction.wallet = 1
+            new_transaction.wallet = transaction_create_form.cleaned_data['wallet']
             new_transaction.save()
             return render(request, 'transaction/done.html')
     else:
-        transaction_create_form = TransactionCreateForm(user=current_user)
+
+        transaction_create_form = TransactionCreateForm(current_user)
     return render(request, 'transaction/create.html',
                   {'transaction_form': transaction_create_form})
 

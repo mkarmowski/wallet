@@ -1,5 +1,5 @@
 from django import forms
-from .models import Wallet, Transaction
+from .models import Wallet, Transaction, Category
 
 
 class WalletCreateForm(forms.ModelForm):
@@ -8,6 +8,12 @@ class WalletCreateForm(forms.ModelForm):
     class Meta:
         model = Wallet
         fields = ('description', 'balance', 'name',)
+
+
+class CategoryCreateForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('name', )
 
 
 class TransactionCreateForm(forms.ModelForm):

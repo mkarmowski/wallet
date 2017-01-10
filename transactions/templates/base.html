@@ -24,6 +24,7 @@
       <ul>
         <li><a href="{% url 'main' %}">Home</a></li>
         <li><a href="{% url 'wallet:wallet_list' %}">Your Wallets</a></li>
+        <li><a href="{% url 'wallet:category_list' %}">Categories</a></li>
         <li><a href="{% url 'wallet:transactions_list' %}">Transactions</a></li>
         <li>{% if request.user.is_authenticated %}
                 Hello {{ request.user.first_name }},

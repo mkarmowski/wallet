@@ -29,6 +29,7 @@ class Wallet(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, unique=True)
     slug = models.SlugField(max_length=100, db_index=True, unique=True)
+    user = models.ForeignKey(User, related_name='categories')
 
     class Meta:
         ordering = ('name',)
@@ -38,8 +39,13 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+            super(Category, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
-        return reverse('wallet:categories_list', args=[self.slug])
+        return reverse('wallet:category_details', args=[self.id])
 
 
 class Transaction(models.Model):

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Your categories{% endblock %}
+
+{% block content %}
+    <h1>Your Categories</h1><br>
+    <div class="category-list">
+        {% for category in categories %}
+            <div class="category">
+                <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+            </div><br>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block menu %}
+    <div>
+        <a href="{% url 'wallet:category_create' %}">Create new category</a>
+    </div>
+{% endblock %}

@@ -17,6 +17,7 @@
 
 {% block menu %}
     <div>
+        <a href="{% url 'wallet:category_create' %}">Create new category</a><br>
         <a href="{% url 'wallet:transaction_create' %}">Create new transaction</a>
     </div>
 {% endblock %}

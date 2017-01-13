@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, UpdateView
 from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm
 from .models import Transaction, Category, Wallet
 
@@ -45,6 +45,16 @@ class WalletDelete(DeleteView):
         return super(WalletDelete, self).dispatch(*args, **kwargs)
 
 
+class WalletUpdate(UpdateView):
+    model = Wallet
+    fields = ['name', 'balance', 'description']
+    template_name = 'wallet/update.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(WalletUpdate, self).dispatch(*args, **kwargs)
+
+
 @login_required
 def category_list(request):
     current_user = request.user
@@ -82,6 +92,22 @@ class CategoryDelete(DeleteView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(CategoryDelete, self).dispatch(*args, **kwargs)
+
+
+class CategoryUpdate(UpdateView):
+    model = Category
+    fields = ['name', 'slug', 'user']
+    template_name = 'category/update.html'
+    success_url = reverse_lazy('wallet:category_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CategoryUpdate, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        return super(CategoryUpdate, self).form_valid(form)
 
 
 @login_required
@@ -124,3 +150,13 @@ class TransactionDelete(DeleteView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(TransactionDelete, self).dispatch(*args, **kwargs)
+
+
+class TransactionUpdate(UpdateView):
+    model = Transaction
+    fields = ['name', 'type', 'wallet', 'category', 'date', 'amount', 'notes']
+    template_name = 'transaction/update.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(TransactionUpdate, self).dispatch(*args, **kwargs)

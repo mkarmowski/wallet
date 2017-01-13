@@ -2,7 +2,7 @@ import django.utils.timezone
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.text import slugify
+
 
 TRANSACTION_CHOICES = (
     ('income', 'Income'),
@@ -28,7 +28,6 @@ class Wallet(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, unique=True)
-    slug = models.SlugField(max_length=100, db_index=True, unique=True)
     user = models.ForeignKey(User, related_name='categories')
 
     class Meta:
@@ -39,18 +38,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-            super(Category, self).save(*args, **kwargs)
-
     def get_absolute_url(self):
         return reverse('wallet:category_details', args=[self.id])
 
 
 class Transaction(models.Model):
     name = models.CharField(max_length=100, db_index=True)
-    slug = models.SlugField(max_length=100, db_index=True)
     type = models.CharField(choices=TRANSACTION_CHOICES, max_length=10)
     user = models.ForeignKey(User, related_name='transactions')
     wallet = models.ForeignKey(Wallet, null=True, blank=True, related_name='transactions')
@@ -70,11 +63,6 @@ class Transaction(models.Model):
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-            super(Transaction, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('wallet:transaction_details', args=[self.id])

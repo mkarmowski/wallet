@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
@@ -96,18 +96,12 @@ class CategoryDelete(DeleteView):
 
 class CategoryUpdate(UpdateView):
     model = Category
-    fields = ['name', 'slug', 'user']
     template_name = 'category/update.html'
-    success_url = reverse_lazy('wallet:category_list')
+    form_class = CategoryCreateForm
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(CategoryUpdate, self).dispatch(*args, **kwargs)
-
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.user = self.request.user
-        return super(CategoryUpdate, self).form_valid(form)
 
 
 @login_required

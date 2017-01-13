@@ -1,4 +1,4 @@
-import datetime
+import django.utils.timezone
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -59,7 +59,7 @@ class Transaction(models.Model):
                                  null=True,
                                  blank=True)
     date = models.DateField(verbose_name='Date of transaction',
-                                default=datetime.datetime.now())
+                            default=django.utils.timezone.now())
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)

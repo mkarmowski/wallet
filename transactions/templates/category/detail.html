@@ -10,5 +10,6 @@
                 Transactions in this category:
             </p>
         </p>
+        <a href="{% url 'wallet:category_delete' pk=category.id %}">Delete this category</a>
     </div>
 {% endblock %}

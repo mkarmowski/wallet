@@ -10,5 +10,6 @@
             <strong>User:</strong> {{ wallet.user }}<br>
             <strong>Description:</strong> {{ wallet.description }}<br>
         </p>
+        <a href="{% url 'wallet:wallet_delete' pk=wallet.id %}">Delete this wallet</a>
     </div>
 {% endblock %}

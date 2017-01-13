@@ -13,5 +13,6 @@
             <strong>Amount:</strong> {{ transaction.amount }}<br>
             <strong>Notes:</strong> {{ transaction.notes }}<br>
         </p>
+        <a href="{% url 'wallet:transaction_delete' pk=transaction.id %}">Delete this transaction</a>
     </div>
 {% endblock %}

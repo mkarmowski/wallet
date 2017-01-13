@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm category delete{% endblock %}
+
+{% block content %}
+    <form action="" method="post">{% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"? All transactions within this category will be deleted as well.</p>
+        <input type="submit" value="Confirm" />
+    </form>
+{% endblock %}

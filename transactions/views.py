@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -18,7 +20,9 @@ def wallet_list(request):
 def wallet_details(request, id):
     user = request.user
     wallet = get_object_or_404(Wallet, id=id)
-    return render(request, 'wallet/detail.html', {'wallet': wallet})
+    transactions = Transaction.objects.filter(wallet=wallet)
+    return render(request, 'wallet/detail.html', {'wallet': wallet,
+                                                  'transactions': transactions})
 
 
 @login_required
@@ -29,6 +33,7 @@ def wallet_create(request):
             new_wallet = wallet_create_form.save(commit=False)
             new_wallet.user = request.user
             new_wallet.save()
+            messages.success(request, 'Wallet created')
             return render(request, 'wallet/done.html')
     else:
         wallet_create_form = WalletCreateForm()
@@ -66,7 +71,9 @@ def category_list(request):
 def category_details(request, id):
     user = request.user
     category = get_object_or_404(Category, id=id)
-    return render(request, 'category/detail.html', {'category': category})
+    transactions = Transaction.objects.filter(category=category)
+    return render(request, 'category/detail.html', {'category': category,
+                                                    'transactions': transactions})
 
 
 @login_required
@@ -78,6 +85,7 @@ def category_create(request):
             new_category = category_create_form.save(commit=False)
             new_category.user = request.user
             new_category.save()
+            messages.success(request, 'Category created')
             return render(request, 'category/done.html')
     else:
         category_create_form = CategoryCreateForm()
@@ -107,8 +115,21 @@ class CategoryUpdate(UpdateView):
 @login_required
 def transaction_list(request):
     current_user = request.user
-    transactions = Transaction.objects.filter(user=current_user)
-    return render(request, 'transaction/list.html', {'transactions': transactions})
+    transactions_list = Transaction.objects.filter(user=current_user)
+    paginator = Paginator(transactions_list, 5)
+
+    page = request.GET.get('page')
+    try:
+        transactions = paginator.page(page)
+    except PageNotAnInteger:
+        transactions = paginator.page(1)
+    except EmptyPage:
+        transactions = paginator.page(paginator.num_pages)
+
+    return render(request, 'transaction/list.html',
+                  {'transactions': transactions,
+                   'page': page,
+                   'transactions_list': transactions_list})
 
 
 @login_required
@@ -128,6 +149,7 @@ def transaction_create(request):
             wallet = get_object_or_404(Wallet, name=new_transaction.wallet)
             new_transaction.wallet_balance_adjust(wallet, new_transaction)  # Adjust chosen wallet balance
             new_transaction.save()
+            messages.success(request, 'Transaction created')
             return render(request, 'transaction/done.html')
     else:
 

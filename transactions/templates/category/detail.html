@@ -13,4 +13,16 @@
         <p><a href="{% url 'wallet:category_update' pk=category.id %}">Edit this category</a></p>
         <p><a href="{% url 'wallet:category_delete' pk=category.id %}">Delete this category</a></p>
     </div>
+    <div class="wallet-transactions">
+        <p><h2>Latest transactions:</h2></p>
+        {% for transaction in transactions %}
+            <div>
+                <p><strong><a href="{% url 'wallet:transaction_details' id=transaction.id %}">{{ transaction.name }}</a></strong><br>
+                    Wallet: {{ transaction.wallet}}<br>
+                    Amount: {{ transaction.amount }}<br>
+                    Date: {{ transaction.date }}<br>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

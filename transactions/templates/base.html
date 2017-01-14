@@ -5,7 +5,7 @@
 <title>{% block title %}{% endblock %}</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<link href="{% static 'css/styles.css' %}?version=3" rel="stylesheet" type="text/css" media="all">
+<link href="{% static 'css/styles.css' %}?version=5" rel="stylesheet" type="text/css" media="all">
 <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=Vollkorn:regular,italic,bold" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
@@ -39,8 +39,18 @@
 <aside id="introduction" class="bodywidth clear">
   <div id="introleft">
     <h2>Welcome to <span class="blue">Wallets</span></h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis molestie sapien. Proin elit quam, commodo ut aliquet vel, elementum ut odio. Praesent semper tincidunt magna, sed sagittis elit congue sed. Mauris malesuada, elit ut luctus tristique, lectus libero rutrum mauris, ac tristique.</p>
-    <p><a href="#" class="findoutmore">Find out more?</a></p>
+    <p>
+      {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    {{ message|safe }}
+                        <a href="#" class="close">✖</a>
+                </li>
+            {% endfor %}
+        </ul>
+      {% endif %}
+    </p>
     {% block intro %}
     {% endblock %}
   </div>
@@ -77,5 +87,6 @@
     <p class="copyright">Website Template By <a target="_blank" href="http://www.tristarwebdesign.co.uk/">Tristar</a> &amp; Modified By <a target="_blank" href="http://www.os-templates.com/">OS Templates</a></p>
   </footer>
 </div>
+
 </body>
 </html>

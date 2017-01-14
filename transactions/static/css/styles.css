@@ -38,8 +38,8 @@ h1, h2, h3, h4, h5, h6{color:#2f2f2f; font-family:"Ubuntu",arial;}
 #websitetitle{float:left; margin:-8px 0 0 0;}
 #websitetitle h1{font-size:2.538em; font-weight:normal;}
 #websitetitle h2{font:1.462em "Georgia"; font-style:italic; font-weight:normal; margin:-3px 0 0 0;}
-#mainheader nav{float:right; font:1.615em "Ubuntu",arial,; margin:8px 0 0 0;}
-#mainheader nav li{list-style-type:none; display:inline; margin:0 0 0 65px;}
+#mainheader nav{float:right; font:1.615em "Ubuntu",arial,; margin:3px 0 0 0;}
+#mainheader nav li{list-style-type:none; display:inline; margin:0 0 0 30px;}
 #mainheader a, #mainheader:visited{color:#2f2f2f;}
 #mainheader a:hover{text-decoration:none; color:#7e7e7e;}
 

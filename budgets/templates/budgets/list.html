@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Your budgets{% endblock %}
+
+{% block content %}
+    <h1>Your Budgets</h1><br>
+    <div class="budget-list">
+        {% for budget in budgets %}
+            <div class="budget">
+                <a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a>
+            </div><br>
+        {% endfor %}
+    </div>
+{% endblock %}
+

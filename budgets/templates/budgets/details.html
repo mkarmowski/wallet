@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Budget: {{ budget.name }}{% endblock %}
+
+{% block content %}
+    <div class="budget-detail">
+        <p>
+            <h1><strong>{{ budget.name }}</strong></h1><br>
+            <p>Running from {{ budget.date_from }} to {{ budget.date_to }}</p><br>
+            <strong>Amount:</strong> {{ budget.amount }}<br>
+            <strong>Wallet:</strong> {{ budget.wallet }}<br>
+            <strong>Category:</strong> {{ budget.category }}<br>
+        </p>
+    </div><br>
+    <p class="budget-transactions">
+        <p><h2>Latest transactions:</h2></p>
+        {% for transaction in transactions %}
+            <div>
+                <p><strong><a href="{% url 'wallet:transaction_details' id=transaction.id %}">{{ transaction.name }}</a></strong><br>
+                    Category: {{ transaction.category }}<br>
+                    Amount: {{ transaction.amount }}<br>
+                    Date: {{ transaction.date }}<br>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

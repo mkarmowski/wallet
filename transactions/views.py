@@ -117,7 +117,6 @@ def transaction_detail(request, id):
     return render(request, 'transaction/detail.html', {'transaction': transaction})
 
 
-
 @login_required
 def transaction_create(request):
     current_user = request.user
@@ -126,7 +125,8 @@ def transaction_create(request):
         if transaction_create_form.is_valid():
             new_transaction = transaction_create_form.save(commit=False)
             new_transaction.user = request.user
-            new_transaction.wallet = transaction_create_form.cleaned_data['wallet']
+            wallet = get_object_or_404(Wallet, name=new_transaction.wallet)
+            new_transaction.wallet_balance_adjust(wallet, new_transaction)  # Adjust chosen wallet balance
             new_transaction.save()
             return render(request, 'transaction/done.html')
     else:

@@ -1,6 +1,7 @@
 import django.utils.timezone
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.core.validators import MinValueValidator
 from django.db import models
 
 
@@ -55,7 +56,7 @@ class Transaction(models.Model):
                             default=django.utils.timezone.now())
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     notes = models.TextField(max_length=250)
 
     class Meta:
@@ -66,3 +67,11 @@ class Transaction(models.Model):
 
     def get_absolute_url(self):
         return reverse('wallet:transaction_details', args=[self.id])
+
+    def wallet_balance_adjust(self, wallet, transaction):
+        if transaction.type == 'expense':
+            wallet.balance -= transaction.amount
+            return wallet.save()
+        else:
+            wallet.balance += transaction.amount
+            return wallet.save()

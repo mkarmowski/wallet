@@ -12,6 +12,10 @@
             <strong>Category:</strong> {{ budget.category }}<br>
         </p>
     </div><br>
+    <p>
+        <p><a href="{% url 'budgets:budget_update' pk=budget.id %}">Edit this budget</a></p>
+        <p><a href="{% url 'budgets:budget_delete' pk=budget.id %}">Delete this budget</a></p>
+    </p>
     <p class="budget-transactions">
         <p><h2>Latest transactions:</h2></p>
         {% for transaction in transactions %}

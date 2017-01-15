@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Create new budget{% endblock %}
+
+{% block content %}
+    <h1>Create new budget</h1>
+    <p>Fill in the details:</p>
+    <form action="." method="post">
+        {{ budget_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Create a budget"></p>
+    </form>
+{% endblock %}

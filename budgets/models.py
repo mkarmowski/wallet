@@ -1,3 +1,4 @@
+import django.utils.timezone
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -11,9 +12,9 @@ class Budget(models.Model):
     user = models.ForeignKey(User, related_name='budgets')
     wallet = models.ForeignKey(Wallet)
     category = models.ForeignKey(Category)
-    date_from = models.DateField()
-    date_to = models.DateField()
-    active = models.BooleanField()
+    date_from = models.DateField(default=django.utils.timezone.now())
+    date_to = models.DateField(default=django.utils.timezone.now())
+    active = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['date_from', 'date_to', ]

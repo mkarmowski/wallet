@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
+
+from budgets.models import Budget
 from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm
 from .models import Transaction, Category, Wallet
 
@@ -149,6 +151,12 @@ def transaction_create(request):
             wallet = get_object_or_404(Wallet, name=new_transaction.wallet)
             new_transaction.wallet_balance_adjust(wallet, new_transaction)  # Adjust chosen wallet balance
             new_transaction.save()
+
+            budgets = Budget.objects.filter(user=current_user)
+            for budget in budgets:
+                if budget.category == new_transaction.category and budget.budget_used > 80:
+                    messages.info(request, 'You are at the limit of your budget {}'.format(budget.name))
+
             messages.success(request, 'Transaction created')
             return render(request, 'transaction/done.html')
     else:

@@ -23,8 +23,7 @@ def budgets_list(request):
 def budget_details(request, id):
     budget = get_object_or_404(Budget, id=id)
     transactions = Transaction.objects.filter(
-        Q(date__gte=budget.date_from) & Q(date__lte=budget.date_to) & Q(category=budget.category)
-    )
+        Q(date__gte=budget.date_from) & Q(date__lte=budget.date_to) & Q(category=budget.category))
     budget_used = Budget.budget_completion(budget, transactions)
     return render(request, 'budgets/details.html', {'budget': budget,
                                                     'budget_used': budget_used,

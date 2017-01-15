@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -152,10 +153,21 @@ def transaction_create(request):
             new_transaction.wallet_balance_adjust(wallet, new_transaction)  # Adjust chosen wallet balance
             new_transaction.save()
 
-            budgets = Budget.objects.filter(user=current_user)
+            budgets = Budget.objects.filter(user=current_user)  # check if the budget has reached limit
             for budget in budgets:
-                if budget.category == new_transaction.category and budget.budget_used > 80:
-                    messages.info(request, 'You are at the limit of your budget {}'.format(budget.name))
+                transactions = Transaction.objects.filter(
+                    Q(date__gte=budget.date_from) & Q(date__lte=budget.date_to) & Q(category=budget.category))
+
+                if budget.category == new_transaction.category and \
+                                budget.budget_completion(transactions) >= 100:
+                    messages.info(request,
+                                  'You have reached the limit of your budget {}'
+                                  .format(budget.name))
+                elif budget.category == new_transaction.category and \
+                                budget.budget_completion(transactions) > 80:
+                    messages.info(request,
+                                  'You are almost at the limit of your budget {}'
+                                  .format(budget.name))
 
             messages.success(request, 'Transaction created')
             return render(request, 'transaction/done.html')

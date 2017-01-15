@@ -24,3 +24,11 @@ class Budget(models.Model):
 
     def get_absolute_url(self):
         return reverse('budgets:budget_details', args=[self.id])
+
+    def budget_completion(self, queryset):
+        amount_set = self.amount
+        amount_used = 0
+        for transaction in queryset:
+            amount_used += transaction.amount
+        budget_used = (amount_used / amount_set) * 100  # budget use in percent
+        return budget_used

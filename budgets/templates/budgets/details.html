@@ -6,6 +6,7 @@
     <div class="budget-detail">
         <p>
             <h1><strong>{{ budget.name }}</strong></h1><br>
+            <h3>Budget used: {{ budget_used|floatformat:'2' }}%</h3>
             <p>Running from {{ budget.date_from }} to {{ budget.date_to }}</p><br>
             <strong>Amount:</strong> {{ budget.amount }}<br>
             <strong>Wallet:</strong> {{ budget.wallet }}<br>

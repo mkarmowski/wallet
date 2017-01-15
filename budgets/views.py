@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
@@ -6,7 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView
 from django.views.generic import UpdateView
 
-from budgets.forms import BudgetCreateForm
+from transactions.models import Transaction, Category, Wallet
+from .forms import BudgetCreateForm
 from .models import Budget
 
 
@@ -20,8 +22,13 @@ def budgets_list(request):
 @login_required
 def budget_details(request, id):
     budget = get_object_or_404(Budget, id=id)
-    # transactions = Transaction.objects.filter(budget=budget)
-    return render(request, 'budgets/details.html', {'budget': budget})
+    transactions = Transaction.objects.filter(
+        Q(date__gte=budget.date_from) & Q(date__lte=budget.date_to) & Q(category=budget.category)
+    )
+    budget_used = Budget.budget_completion(budget, transactions)
+    return render(request, 'budgets/details.html', {'budget': budget,
+                                                    'budget_used': budget_used,
+                                                    'transactions': transactions})
 
 
 @login_required

@@ -1,7 +1,12 @@
+import datetime
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+
+from budgets.models import Budget
+from transactions.models import Transaction
 from .forms import LoginForm, UserRegistrationForm
 
 
@@ -44,4 +49,21 @@ def user_login(request):
 
 @login_required
 def main_view(request):
-    return render(request, 'users/main.html')
+    current_user = request.user
+    transactions = Transaction.objects.filter(user=current_user)
+    budget_list = Budget.objects.filter(Q(user=current_user)
+                                        & Q(date_to__gte=datetime.datetime.now())
+                                        & Q(date_from__lte=datetime.datetime.now()))
+    budgets_finishing = budget_list.filter(finishing=True)
+    budgets_finished = budget_list.filter(finished=True)
+
+    '''for budget in budget_list:
+        if budget.finished:
+            budgets_finished.append(budget)
+        elif budgets_finishing and not budgets_finished:
+            budgets_finishing.append(budget)'''
+
+    return render(request, 'users/main.html', {'transactions': transactions,
+                                               'budgets': budget_list,
+                                               'budgets_finishing': budgets_finishing,
+                                               'budgets_finished': budgets_finished})

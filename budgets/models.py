@@ -14,7 +14,9 @@ class Budget(models.Model):
     category = models.ForeignKey(Category)
     date_from = models.DateField(default=django.utils.timezone.now())
     date_to = models.DateField(default=django.utils.timezone.now())
-    active = models.BooleanField(default=False)
+    finishing = models.BooleanField(default=False)
+    finished = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['date_from', 'date_to', ]

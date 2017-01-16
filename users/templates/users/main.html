@@ -3,6 +3,36 @@
 {% block title %}Main page{% endblock %}
 
 {% block content %}
-    <h1>Wallets main page</h1>
-    <p>Welcome to the Wallets main page.</p>
+    <h1>Wallets Dashboard</h1>
+    <div><p><h3>Your latest transactions:</h3></p>
+        <p>
+            {% for transaction in transactions|slice:':5' %}
+                <div>
+                    <strong><a href="{{ transaction.get_absolute_url }}">{{ transaction.name }}</a></strong><br>
+                    Amount: {{ transaction.amount }}<br>
+                    Wallet: {{ transaction.wallet }}<br>
+                </div><br>
+            {% endfor %}
+
+            {% for budget in budgets %}
+                {{ budget.name }}
+            {% endfor %}
+        </p>
+        <p>
+        <h3>Your budgets are almost finished:</h3>
+            {% for budget in budgets_finishing %}
+                <div>
+                    <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+        <h3>Your budgets are finished:</h3>
+            {% for budget in budgets_finished %}
+                <div>
+                    <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                </div>
+            {% endfor %}
+        </p>
+    </div>
 {% endblock %}

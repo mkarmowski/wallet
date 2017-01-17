@@ -57,12 +57,6 @@ def main_view(request):
     budgets_finishing = budget_list.filter(finishing=True)
     budgets_finished = budget_list.filter(finished=True)
 
-    '''for budget in budget_list:
-        if budget.finished:
-            budgets_finished.append(budget)
-        elif budgets_finishing and not budgets_finished:
-            budgets_finishing.append(budget)'''
-
     return render(request, 'users/main.html', {'transactions': transactions,
                                                'budgets': budget_list,
                                                'budgets_finishing': budgets_finishing,

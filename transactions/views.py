@@ -178,14 +178,95 @@ def transaction_create(request):
                   {'transaction_form': transaction_create_form})
 
 
-class TransactionDelete(DeleteView):
-    model = Transaction
-    template_name = 'transaction/transaction_confirm_delete.html'
-    success_url = reverse_lazy('wallet:transactions_list')
+# class TransactionDelete(DeleteView):
+#     model = Transaction
+#     template_name = 'transaction/transaction_confirm_delete.html'
+#     success_url = reverse_lazy('wallet:transactions_list')
+#
+#     @method_decorator(login_required)
+#     def dispatch(self, *args, **kwargs):
+#         return super(TransactionDelete, self).dispatch(*args, **kwargs)
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(TransactionDelete, self).dispatch(*args, **kwargs)
+
+def transaction_delete(request, id):
+    transaction = Transaction.objects.get(id=id)
+    category = transaction.category
+    transaction.delete()
+
+    return render(request, 'transaction/delete_done.html')
+
+
+def delete_done(request):
+    def budget_update():
+        budget = get_object_or_404(Budget, id=5)
+        transactions = Transaction.objects.filter(
+            Q(date__gte=budget.date_from)
+            & Q(date__lte=budget.date_to)
+            & Q(category=budget.category))
+        return budget.budget_completion(transactions)
+
+    def budget_adjust():
+        budget = get_object_or_404(Budget, id=5)
+        transactions = Transaction.objects.filter(
+            Q(date__gte=budget.date_from)
+            & Q(date__lte=budget.date_to)
+            & Q(category=budget.category))
+        if budget.category == transactions.category and \
+           budget.budget_completion(transactions) >= 100:
+            budget.finished, budget.finishing = True, False
+            return budget.save()
+        elif budget.category == category and \
+                80 >= budget.budget_completion(transactions) < 100:
+            budget.finished, budget.finishing = False, True
+            return budget.save()
+        else:
+            budget.finished, budget.finishing = False, False
+            return budget.save()
+
+
+    # def budget_adjust():
+    #     budget = get_object_or_404(Budget, id=5)
+    #     transactions = Transaction.objects.filter(
+    #         Q(date__gte=budget.date_from)
+    #         & Q(date__lte=budget.date_to)
+    #         & Q(category=budget.category))
+    #     if budget.category == transactions.category and \
+    #        budget.budget_completion(transactions) >= 100:
+    #         budget.finished, budget.finishing = True, False
+    #         return budget.save()
+    #     elif budget.category == category and \
+    #             80 >= budget.budget_completion(transactions) < 100:
+    #         budget.finished, budget.finishing = False, True
+    #         return budget.save()
+    #     else:
+    #         budget.finished, budget.finishing = False, False
+    #         return budget.save()
+
+    budget_update()
+    budget_adjust()
+    return render(request, 'transaction/delete_done.html')
+
+
+# def transaction_delete_done(request, category):
+#     def budget_adjust():
+#         budgets = Budget.objects.filter(id=5)
+#         for budget in budgets:
+#             transactions = Transaction.objects.filter(
+#                 Q(date__gte=budget.date_from)
+#                 & Q(date__lte=budget.date_to)
+#                 & Q(category=budget.category))
+#
+#             if budget.category == category and \
+#                             budget.budget_completion(transactions) >= 100:
+#                 budget.finished, budget.finishing = True, False
+#                 budget.save()
+#             elif budget.category == category and \
+#                                     80 >= budget.budget_completion(transactions) < 100:
+#                 budget.finished, budget.finishing = False, True
+#                 budget.save()
+#
+#     budget_adjust()
+#     return render(request, 'transaction/done.html')
 
 
 class TransactionUpdate(UpdateView):

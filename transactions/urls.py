@@ -16,6 +16,6 @@ urlpatterns = [
     url(r'^transaction/list/$', views.transaction_list, name='transactions_list'),
     url(r'^transaction/detail/(?P<id>\d+)/$', views.transaction_detail, name='transaction_details'),
     url(r'^transaction/create/$', views.transaction_create, name='transaction_create'),
-    url(r'^transaction/delete/(?P<pk>\d+)/$', views.TransactionDelete.as_view(), name='transaction_delete'),
+    url(r'^transaction/delete/(?P<id>\d+)/$', views.transaction_delete, name='transaction_delete'),
     url(r'^transaction/update/(?P<pk>\d+)/$', views.TransactionUpdate.as_view(), name='transaction_update'),
 ]

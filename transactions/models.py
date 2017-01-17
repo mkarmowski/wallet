@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
 
+from budgets.models import Budget
 
 TRANSACTION_CHOICES = (
     ('income', 'Income'),
@@ -47,17 +48,24 @@ class Transaction(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     type = models.CharField(choices=TRANSACTION_CHOICES, max_length=10)
     user = models.ForeignKey(User, related_name='transactions')
-    wallet = models.ForeignKey(Wallet, null=True, blank=True, related_name='transactions')
+    wallet = models.ForeignKey(Wallet,
+                               null=True,
+                               blank=True,
+                               related_name='transactions')
     category = models.ForeignKey(Category,
                                  related_name='transactions',
                                  null=True,
                                  blank=True)
+    budget = models.ForeignKey(Budget,
+                               blank=True,
+                               null=True,
+                               default=None)
     date = models.DateField(verbose_name='Date of transaction',
                             default=django.utils.timezone.now())
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-    notes = models.TextField(max_length=250)
+    notes = models.TextField(max_length=250, blank=True)
 
     class Meta:
         ordering = ('-created', )

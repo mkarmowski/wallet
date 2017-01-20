@@ -8,4 +8,9 @@ urlpatterns = [
     url(r'^budget/create/$', views.budget_create, name='budget_create'),
     url(r'^budget/delete/(?P<pk>\d+)/$', views.BudgetDelete.as_view(), name='budget_delete'),
     url(r'^budget/update/(?P<pk>\d+)/$', views.BudgetUpdate.as_view(), name='budget_update'),
+    url(r'^savings/list/$', views.savings_list, name='savings_list'),
+    url(r'^savings/details/(?P<id>\d+)/$', views.saving_details, name='saving_details'),
+    url(r'^savings/create/$', views.saving_create, name='saving_create'),
+    url(r'^savings/delete/(?P<pk>\d+)/$', views.SavingDelete.as_view(), name='saving_delete'),
+    url(r'^savings/update/(?P<pk>\d+)/$', views.SavingUpdate.as_view(), name='saving_update'),
 ]

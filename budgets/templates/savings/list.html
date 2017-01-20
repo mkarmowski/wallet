@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Savings{% endblock %}
+
+{% block content %}
+    <h1>Your Savings</h1><br>
+    <div class="saving-list">
+        {% for saving in savings %}
+            <div class="saving">
+                <a href="{{ saving.get_absolute_url }}">{{ saving.name }}</a>
+            </div><br>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block menu %}
+    <div>
+        <a href="{% url 'budgets:saving_create' %}">Create new saving</a>
+    </div>
+{% endblock %}

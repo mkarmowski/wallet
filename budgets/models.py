@@ -32,3 +32,25 @@ class Budget(models.Model):
             amount_used += transaction.amount
         budget_used = (amount_used / amount_set) * 100  # budget use in percent
         return budget_used
+
+
+class Saving(models.Model):
+    name = models.CharField(max_length=100, db_index=True)
+    goal = models.DecimalField(max_digits=10, decimal_places=2)  # saving amount
+    current_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    user = models.ForeignKey(User, related_name='savings')
+    date_from = models.DateField()
+    finished = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('budgets:saving_details', args=[self.id])
+
+    def saving_completion(self):
+        completion = (self.current_amount / self.goal) * 100
+        return completion

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Create new saving{% endblock %}
+
+{% block content %}
+    <h1>Create new saving</h1>
+    <p>Fill in the details:</p>
+    <form action="." method="post">
+        {{ saving_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Create a saving"></p>
+    </form>
+{% endblock %}

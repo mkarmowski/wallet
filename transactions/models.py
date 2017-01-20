@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
 
-from budgets.models import Budget
+from budgets.models import Budget, Saving
 
 TRANSACTION_CHOICES = (
     ('income', 'Income'),
@@ -57,6 +57,10 @@ class Transaction(models.Model):
                                  null=True,
                                  blank=True)
     budget = models.ForeignKey(Budget,
+                               blank=True,
+                               null=True,
+                               default=None)
+    saving = models.ForeignKey(Saving,
                                blank=True,
                                null=True,
                                default=None)

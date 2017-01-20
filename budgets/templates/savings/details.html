@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Saving: {{ saving.name }}{% endblock %}
+
+{% block content %}
+    <div class="saving-detail">
+        <p>
+            <h1><strong>{{ saving.name }}</strong></h1><br>
+            <h3>Saving progress: {{ completion|floatformat:'2' }}%</h3>
+            <p>Running from {{ saving.date_from }}</p><br>
+            <strong>Goal:</strong> {{ saving.goal }}<br>
+        </p>
+    </div><br>
+    <p>
+        <p><a href="{% url 'budgets:saving_update' pk=saving.id %}">Edit this saving</a></p>
+        <p><a href="{% url 'budgets:saving_delete' pk=saving.id %}">Delete this saving</a></p>
+    </p>
+    <p class="saving-transactions">
+        <p><h2>Latest transactions:</h2></p>
+        {% for transaction in transactions %}
+            <div>
+                <p><strong><a href="{% url 'wallet:transaction_details' id=transaction.id %}">{{ transaction.name }}</a></strong><br>
+                    Category: {{ transaction.category }}<br>
+                    Amount: {{ transaction.amount }}<br>
+                    Date: {{ transaction.date }}<br>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -8,8 +8,8 @@ from django.views.generic import DeleteView
 from django.views.generic import UpdateView
 
 from transactions.models import Transaction, Category, Wallet
-from .forms import BudgetCreateForm
-from .models import Budget
+from .forms import BudgetCreateForm, SavingCreateForm
+from .models import Budget, Saving
 
 
 @login_required
@@ -66,3 +66,58 @@ class BudgetUpdate(UpdateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(BudgetUpdate, self).dispatch(*args, **kwargs)
+
+
+@login_required
+def savings_list(request):
+    current_user = request.user
+    savings = Saving.objects.filter(user=current_user)
+    return render(request, 'savings/list.html', {'savings': savings})
+
+
+@login_required
+def saving_details(request, id):
+    saving = get_object_or_404(Saving, id=id)
+    transactions = Transaction.objects.filter(saving=saving)
+    completion = saving.saving_completion()
+    return render(request, 'savings/details.html', {'saving': saving,
+                                                    'transactions': transactions,
+                                                    'completion': completion})
+
+
+@login_required
+def saving_create(request):
+    current_user = request.user
+    if request.method == 'POST':
+        saving_create_form = SavingCreateForm(request.POST)
+        if saving_create_form.is_valid():
+            new_saving = saving_create_form.save(commit=False)
+            new_saving.user = request.user
+            new_saving.save()
+            messages.success(request, 'Saving created')
+            return render(request, 'savings/done.html')
+    else:
+
+        saving_create_form = SavingCreateForm()
+    return render(request, 'savings/create.html',
+                  {'saving_form': saving_create_form})
+
+
+class SavingDelete(DeleteView):
+    model = Saving
+    template_name = 'savings/saving_confirm_delete.html'
+    success_url = reverse_lazy('budgets:savings_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SavingDelete, self).dispatch(*args, **kwargs)
+
+
+class SavingUpdate(UpdateView):
+    model = Saving
+    fields = ['name', 'goal', 'date_from']
+    template_name = 'savings/update.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SavingUpdate, self).dispatch(*args, **kwargs)

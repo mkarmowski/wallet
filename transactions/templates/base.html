@@ -5,7 +5,7 @@
 <title>{% block title %}{% endblock %}</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
-<link href="{% static 'css/styles.css' %}?version=8" rel="stylesheet" type="text/css" media="all">
+<link href="{% static 'css/styles.css' %}?version=11" rel="stylesheet" type="text/css" media="all">
 <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=Vollkorn:regular,italic,bold" rel="stylesheet" type="text/css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
@@ -17,79 +17,81 @@
 </head>
 <body>
 <div id="headerwrap">
-  <header id="mainheader" class="bodywidth clear"> <img src="/static/images/logo.png" alt="" class="logo">
-    <hgroup id="websitetitle">
-      <h1><span class="bold">Wallets</span></h1>
-      <h2>manage your money easily</h2>
-    </hgroup>
-    <nav>
-      <ul>
-        <li><a href="{% url 'main' %}">Home</a></li>
-        <li><a href="{% url 'wallet:wallet_list' %}">Your Wallets</a></li>
-        <li><a href="{% url 'wallet:category_list' %}">Categories</a></li>
-        <li><a href="{% url 'wallet:transactions_list' %}">Transactions</a></li>
-        <li><a href="{% url 'budgets:budgets_list' %}">Budgets</a></li>
-        <li><a href="{% url 'budgets:savings_list' %}">Savings</a></li>
-        <li>{% if request.user.is_authenticated %}
-                Hello {{ request.user.first_name }},
-                    <a href="{% url "logout" %}">Logout</a>
-                {% else %}
-                    <a href="{% url "login" %}">Log-in</a>
-            {% endif %}</li>
-      </ul>
-    </nav>
-  </header>
+    <header id="mainheader" class="bodywidth clear"> <img src="/static/images/logo.png" alt="" class="logo">
+        <hgroup id="websitetitle">
+            <h1><span class="bold">Wallets</span></h1>
+            <h2>manage your money easily</h2>
+        </hgroup>
+        <nav>
+            <ul>
+                <li><a href="{% url 'main' %}">Home</a></li>
+                <li><a href="{% url 'wallet:wallet_list' %}">Your Wallets</a></li>
+                <li><a href="{% url 'wallet:category_list' %}">Categories</a></li>
+                <li><a href="{% url 'wallet:transactions_list' %}">Transactions</a></li>
+                <li><a href="{% url 'budgets:budgets_list' %}">Budgets</a></li>
+                <li><a href="{% url 'budgets:savings_list' %}">Savings</a></li>
+                <li>
+                    {% if request.user.is_authenticated %}
+                        Hello {{ request.user.first_name }},
+                            <a href="{% url "logout" %}">Logout</a>
+                    {% else %}
+                            <a href="{% url "login" %}">Log-in</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </header>
 </div>
 <aside id="introduction" class="bodywidth clear">
-  <div id="introleft">
-    <h2>Welcome to <span class="blue">Wallets</span></h2>
-    <p>
-      {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li class="{{ message.tags }}">
-                    {{ message|safe }}
-                        <a href="#" class="close">✖</a>
-                </li>
-            {% endfor %}
-        </ul>
-      {% endif %}
-    </p>
-    {% block intro %}
-    {% endblock %}
-  </div>
+    <div id="introleft">
+        <h2>Welcome to <span class="blue">Wallets</span></h2>
+        <p>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li class="{{ message.tags }}">
+                            {{ message|safe }}
+                                <a href="#" class="close">✖</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        {% block intro %}
+        {% endblock %}
+    </div>
     <!--
-  <blockquote id="introquote">
-    <p>This company is amazing. I can't come up with enough good things to say. Literally. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum magna tortor.</p>
-    <p class="quotename">John Smith, <span class="bold">Another Company</span></p>
-  </blockquote>
-  -->
+    <blockquote id="introquote">
+        <p>This company is amazing. I can't come up with enough good things to say. Literally. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum magna tortor.</p>
+        <p class="quotename">John Smith, <span class="bold">Another Company</span></p>
+    </blockquote>
+    -->
 </aside>
 <div id="maincontent" class="bodywidth clear">
-  <div id="aboutleft">
-    {% block content %}
-    {% endblock %}
-  </div>
-  <section id="articlesright">
-    <!--
-        Menu here
-    -->
-      {% block menu %}
-      {% endblock %}
-  </section>
+    <div id="aboutleft">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <section id="articlesright">
+        <!--
+            Menu here
+        -->
+        {% block menu %}
+        {% endblock %}
+    </section>
 </div>
 <div id="footerwrap">
-  <footer id="mainfooter" class="bodywidth clear">
-    <nav class="clear">
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Your Wallet</a></li>
-        <li><a href="#">Transactions</a></li>
-        <li><a href="#">Sitemap</a></li>
-      </ul>
-    </nav>
-    <p class="copyright">Website Template By <a target="_blank" href="http://www.tristarwebdesign.co.uk/">Tristar</a> &amp; Modified By <a target="_blank" href="http://www.os-templates.com/">OS Templates</a></p>
-  </footer>
+    <footer id="mainfooter" class="bodywidth clear">
+        <nav class="clear">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Your Wallet</a></li>
+                <li><a href="#">Transactions</a></li>
+                <li><a href="#">Sitemap</a></li>
+            </ul>
+        </nav>
+        <p class="copyright">Website Template By <a target="_blank" href="http://www.tristarwebdesign.co.uk/">Tristar</a> &amp; Modified By <a target="_blank" href="http://www.os-templates.com/">OS Templates</a></p>
+    </footer>
 </div>
 
 </body>

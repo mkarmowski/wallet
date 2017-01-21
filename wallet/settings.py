@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'users',
     'transactions',
     'budgets',
+    'pure_pagination',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,3 +133,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'transactions/static/images/')
 LOGIN_REDIRECT_URL = reverse_lazy('main')
 LOGIN_URL = reverse_lazy('login')
 LOGOUT_URL = reverse_lazy('logout')
+
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE_DISPLAYED': 10,
+    'MARGIN_PAGES_DISPLAYED': 2,
+
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}

@@ -2,10 +2,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
+
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from budgets.models import Budget
 from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm
@@ -118,21 +120,16 @@ class CategoryUpdate(UpdateView):
 @login_required
 def transaction_list(request):
     current_user = request.user
-    transactions_list = Transaction.objects.filter(user=current_user)
-    paginator = Paginator(transactions_list, 5)
-
-    page = request.GET.get('page')
     try:
-        transactions = paginator.page(page)
+        page = request.GET.get('page', 1)
     except PageNotAnInteger:
-        transactions = paginator.page(1)
-    except EmptyPage:
-        transactions = paginator.page(paginator.num_pages)
+        page = 1
 
+    objects = Transaction.objects.filter(user=current_user)
+    p = Paginator(objects, 10, request=request)
+    transactions = p.page(page)
     return render(request, 'transaction/list.html',
-                  {'transactions': transactions,
-                   'page': page,
-                   'transactions_list': transactions_list})
+                  {'transactions': transactions})
 
 
 @login_required

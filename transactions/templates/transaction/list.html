@@ -5,14 +5,16 @@
 {% block content %}
     <h1>Your Transactions</h1>
     <div class="transaction-list">
-        {% for transaction in transactions_list %}
+        {% for transaction in transactions.object_list %}
             <div class="transaction">
                 <strong><a href="{{ transaction.get_absolute_url }}">{{ transaction.name }}</a></strong><br>
                 Wallet: {{ transaction.wallet }}<br>
                 Amount: ${{ transaction.amount }}
             </div><br>
         {% endfor %}
-        {% include 'pagination.html' with page=transactions %}
+    </div>
+    <div id="pagination">
+        {{ transactions.render }}
     </div>
 {% endblock %}
 

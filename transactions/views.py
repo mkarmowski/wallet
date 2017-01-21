@@ -12,6 +12,7 @@ from django.views.generic import DeleteView, UpdateView
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from budgets.models import Budget
+from transactions.filters import TransactionFilter
 from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm
 from .models import Transaction, Category, Wallet
 
@@ -245,3 +246,8 @@ def export_transactions_xls(request):
 
     workbook.save(response)
     return response
+
+
+def transaction_filter(request):
+    f = TransactionFilter(request.GET, queryset=Transaction.objects.filter(user=request.user))
+    return render(request, 'transaction/filter.html', {'filter': f})

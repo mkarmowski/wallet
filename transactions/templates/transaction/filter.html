@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="" method="get">
+        {{ filter.form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+    {% for obj in filter.qs %}
+        {# {{ obj.name }} - ${{ obj.amount }}<br /> #}
+        <div class="transaction">
+            <strong><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></strong><br>
+            Wallet: {{ obj.wallet }}<br>
+            Amount: ${{ obj.amount }}
+        </div><br>
+    {% endfor %}
+{% endblock %}

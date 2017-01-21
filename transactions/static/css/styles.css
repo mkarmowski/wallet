@@ -194,7 +194,7 @@ input[type=submit], a.button {
     background:#4086c6;
     color:#fff;
     padding:5px 10px;
-    font-size:11px;
+    font-size:13px;
 }
 
 /* Messages */
@@ -250,3 +250,52 @@ ul.messages li a.close {
             color: #ddd;
             cursor: default;
         }
+
+/* forms */
+form {
+    overflow:auto;
+}
+
+form p {
+    width:100%;
+    overflow:auto;
+}
+
+label {
+    float:left;
+    clear:both;
+    color:#333;
+    margin-bottom:2px;
+}
+input, textarea {
+    clear:both;
+    float:left;
+    margin:0 0 0px;
+    background:#efefef;
+    border:0;
+    padding:4px 10px;
+    font-size:12px;
+}
+
+select {
+    clear:both;
+    float:left;
+    margin:0 0 10px;
+    background:#efefef;
+    border:0;
+    padding:4px 10px;
+    font-size:12px;
+}
+
+.errorlist {
+    color:#cc0033;
+    float:left;
+    clear:both;
+    padding-left:10px;
+}
+.helptext {
+    margin:0 0 20px 0;
+    color:#aaa;
+    clear:both;
+    float:left;
+    font-size:13px;

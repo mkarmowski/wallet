@@ -9,5 +9,7 @@ class TransactionFilter(django_filters.FilterSet):
         fields = {
             'category': ['exact'],
             'wallet': ['exact'],
-            'date': ['month__gte', 'month__lte']
+            'type': ['exact'],
+            'date': ['gte', 'lte'],
+            'amount': ['gte', 'lte'],
         }

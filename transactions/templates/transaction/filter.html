@@ -1,16 +1,20 @@
 {% extends "base.html" %}
 
+{% block title %}Filter transactions{% endblock %}
+
 {% block content %}
     <form action="" method="get">
         {{ filter.form.as_p }}
         <input type="submit" value="Submit" />
     </form>
-    {% for obj in filter.qs %}
-        {# {{ obj.name }} - ${{ obj.amount }}<br /> #}
-        <div class="transaction">
-            <strong><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></strong><br>
-            Wallet: {{ obj.wallet }}<br>
-            Amount: ${{ obj.amount }}
-        </div><br>
-    {% endfor %}
+    <p>
+        {% for obj in filter.qs %}
+            <div class="transaction">
+                <strong><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></strong><br>
+                Wallet: {{ obj.wallet }}<br>
+                Amount: ${{ obj.amount }}
+            </div><br>
+        {% endfor %}
+        <a href="{% url 'wallet:export_transactions_csv' %}">Export all transactions as CSV</a><br>
+    </p>
 {% endblock %}

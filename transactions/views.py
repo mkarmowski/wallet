@@ -1,8 +1,9 @@
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import csv
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
@@ -200,3 +201,19 @@ class TransactionUpdate(UpdateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(TransactionUpdate, self).dispatch(*args, **kwargs)
+
+
+def export_transactions_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="transactions.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Name', 'Type', 'Date', 'Wallet', 'Category', 'Amount', 'Notes'])
+
+    transactions = Transaction.objects.filter(user=request.user).values_list(
+        'name', 'type', 'date', 'wallet', 'category', 'amount', 'notes')
+    for transaction in transactions:
+        writer.writerow(transaction)
+
+    return response
+

@@ -23,4 +23,7 @@
         <a href="{% url 'wallet:category_create' %}">Create new category</a><br>
         <a href="{% url 'wallet:transaction_create' %}">Create new transaction</a>
     </div>
+    <div>
+        <p><a href="{% url 'wallet:export_transactions_csv' %}">Export all transactions</a></p>
+    </div>
 {% endblock %}

@@ -1,14 +1,15 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView
 from django.views.generic import UpdateView
 
 from transactions.models import Transaction, Category, Wallet
-from .forms import BudgetCreateForm, SavingCreateForm
+from .forms import BudgetCreateForm, SavingCreateForm, SavingDepositForm
 from .models import Budget, Saving
 
 
@@ -91,6 +92,11 @@ def saving_create(request):
     if request.method == 'POST':
         saving_create_form = SavingCreateForm(request.POST)
         if saving_create_form.is_valid():
+            try:
+                categories = Category.objects.get(name='Savings')
+            except ObjectDoesNotExist:
+                saving_category = Category(name='Savings', user=current_user)
+                saving_category.save()
             new_saving = saving_create_form.save(commit=False)
             new_saving.user = request.user
             new_saving.save()
@@ -121,3 +127,35 @@ class SavingUpdate(UpdateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(SavingUpdate, self).dispatch(*args, **kwargs)
+
+
+def saving_deposit(request, pk):
+    saving = get_object_or_404(Saving, id=pk)
+    if request.method == 'POST':
+        saving_deposit_form = SavingDepositForm(request.POST)
+        if saving_deposit_form.is_valid():
+            cd = saving_deposit_form.cleaned_data
+            saving.current_amount += cd['amount']
+            saving.save()
+            messages.success(request, 'Deposit done')
+            return redirect(saving)
+    else:
+        saving_deposit_form = SavingDepositForm()
+    return render(request, 'savings/deposit.html',
+                  {'deposit_form': saving_deposit_form})
+
+
+def saving_withdraw(request, pk):
+    saving = get_object_or_404(Saving, id=pk)
+    if request.method == 'POST':
+        saving_withdraw_form = SavingDepositForm(request.POST)
+        if saving_withdraw_form.is_valid():
+            cd = saving_withdraw_form.cleaned_data
+            saving.current_amount -= cd['amount']
+            saving.save()
+            messages.success(request, 'Withdraw done')
+            return redirect(saving)
+    else:
+        saving_deposit_form = SavingDepositForm()
+    return render(request, 'savings/withdraw.html',
+                  {'withdraw_form': saving_deposit_form})

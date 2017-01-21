@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^savings/create/$', views.saving_create, name='saving_create'),
     url(r'^savings/delete/(?P<pk>\d+)/$', views.SavingDelete.as_view(), name='saving_delete'),
     url(r'^savings/update/(?P<pk>\d+)/$', views.SavingUpdate.as_view(), name='saving_update'),
+    url(r'^savings/deposit/(?P<pk>\d+)/$', views.saving_deposit, name='saving_deposit'),
+    url(r'^savings/withdraw/(?P<pk>\d+)/$', views.saving_withdraw, name='saving_withdraw'),
 ]

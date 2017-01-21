@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Withdraw from saving: {{ saving.name }}{% endblock %}
+
+{% block content %}
+    <h1>Withdraw from saving: {{ saving.name }}</h1>
+    <p>How much would you like to withdraw?</p>
+    <form action="." method="post">
+        {{ withdraw_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Withdraw"></p>
+    </form>
+{% endblock %}

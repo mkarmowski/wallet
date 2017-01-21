@@ -1,4 +1,5 @@
 import csv
+import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -214,6 +215,33 @@ def export_transactions_csv(request):
         'name', 'type', 'date', 'wallet', 'category', 'amount', 'notes')
     for transaction in transactions:
         writer.writerow(transaction)
-
     return response
 
+
+def export_transactions_xls(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="transactions.xls"'
+
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('Transactions')
+
+    # first row
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['Name', 'Type', 'Date', 'Wallet', 'Category', 'Amount', 'Notes', ]
+
+    for col_num in range(len(columns)):
+        worksheet.write(row_num, col_num, columns[col_num], font_style)
+
+    # other rows
+    font_style = xlwt.XFStyle()
+    rows = Transaction.objects.filter(user=request.user).values_list(
+        'name', 'type', 'date', 'wallet', 'category', 'amount', 'notes')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            worksheet.write(row_num, col_num, row[col_num], font_style)
+
+    workbook.save(response)
+    return response

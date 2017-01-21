@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^transaction/delete/(?P<pk>\d+)/$', views.TransactionDelete.as_view(), name='transaction_delete'),
     url(r'^transaction/update/(?P<pk>\d+)/$', views.TransactionUpdate.as_view(), name='transaction_update'),
     url(r'^export/csv/$', views.export_transactions_csv, name='export_transactions_csv'),
+    url(r'^export/xls/$', views.export_transactions_xls, name='export_transactions_xls'),
 ]

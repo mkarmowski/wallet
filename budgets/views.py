@@ -1,3 +1,4 @@
+import django.utils.timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.contrib import messages
@@ -130,32 +131,60 @@ class SavingUpdate(UpdateView):
 
 
 def saving_deposit(request, pk):
-    saving = get_object_or_404(Saving, id=pk)
+    current_user = request.user
     if request.method == 'POST':
-        saving_deposit_form = SavingDepositForm(request.POST)
+        saving_deposit_form = SavingDepositForm(current_user, request.POST)
         if saving_deposit_form.is_valid():
             cd = saving_deposit_form.cleaned_data
-            saving.current_amount += cd['amount']
-            saving.save()
+            saving = get_object_or_404(Saving, id=pk)
+            wallet = get_object_or_404(Wallet, name=cd['wallet'])
+            category = get_object_or_404(Category, name='Savings')
+
+            wallet.balance -= cd['amount']
+            transaction = Transaction(name='Saving deposit to: {}'.format(saving),
+                                      type='expense',
+                                      user=current_user,
+                                      wallet=wallet,
+                                      category=category,
+                                      budget=None,
+                                      saving=saving,
+                                      date=django.utils.timezone.now(),
+                                      amount=cd['amount'])
+            saving.current_amount += cd['amount']  # adjust saving amount
+            saving.save(), wallet.save(), transaction.save()
             messages.success(request, 'Deposit done')
             return redirect(saving)
     else:
-        saving_deposit_form = SavingDepositForm()
+        saving_deposit_form = SavingDepositForm(current_user)
     return render(request, 'savings/deposit.html',
                   {'deposit_form': saving_deposit_form})
 
 
 def saving_withdraw(request, pk):
-    saving = get_object_or_404(Saving, id=pk)
+    current_user = request.user
     if request.method == 'POST':
-        saving_withdraw_form = SavingDepositForm(request.POST)
+        saving_withdraw_form = SavingDepositForm(current_user, request.POST)
         if saving_withdraw_form.is_valid():
             cd = saving_withdraw_form.cleaned_data
-            saving.current_amount -= cd['amount']
-            saving.save()
+            saving = get_object_or_404(Saving, id=pk)
+            wallet = get_object_or_404(Wallet, name=cd['wallet'])
+            category = get_object_or_404(Category, name='Savings')
+
+            wallet.balance += cd['amount']
+            transaction = Transaction(name='Saving withdraw from: {}'.format(saving),
+                                      type='income',
+                                      user=current_user,
+                                      wallet=wallet,
+                                      category=category,
+                                      budget=None,
+                                      saving=saving,
+                                      date=django.utils.timezone.now(),
+                                      amount=cd['amount'])
+            saving.current_amount -= cd['amount']  # adjust saving amount
+            saving.save(), wallet.save(), transaction.save()
             messages.success(request, 'Withdraw done')
             return redirect(saving)
     else:
-        saving_deposit_form = SavingDepositForm()
+        saving_deposit_form = SavingDepositForm(current_user)
     return render(request, 'savings/withdraw.html',
                   {'withdraw_form': saving_deposit_form})

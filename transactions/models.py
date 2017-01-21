@@ -69,7 +69,7 @@ class Transaction(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-    notes = models.TextField(max_length=250, blank=True)
+    notes = models.TextField(max_length=250, blank=True, null=True)
 
     class Meta:
         ordering = ('-created', )

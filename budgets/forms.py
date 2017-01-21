@@ -26,3 +26,8 @@ class SavingCreateForm(forms.ModelForm):
 
 class SavingDepositForm(forms.Form):
     amount = forms.DecimalField(max_digits=10, decimal_places=2)
+    wallet = forms.ModelChoiceField(Wallet)
+
+    def __init__(self, user, *args, **kwargs):
+        super(SavingDepositForm, self).__init__(*args, **kwargs)
+        self.fields['wallet'] = forms.ModelChoiceField(queryset=Wallet.objects.filter(user=user))

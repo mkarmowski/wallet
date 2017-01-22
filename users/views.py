@@ -54,10 +54,12 @@ def main_view(request):
     budget_list = Budget.objects.filter(Q(user=current_user)
                                         & Q(date_to__gte=datetime.datetime.now())
                                         & Q(date_from__lte=datetime.datetime.now()))
+    budgets_running = budget_list.filter(finished=False)
     budgets_finishing = budget_list.filter(finishing=True)
     budgets_finished = budget_list.filter(finished=True)
 
     return render(request, 'users/main.html', {'transactions': transactions,
                                                'budgets': budget_list,
+                                               'budgets_running': budgets_running,
                                                'budgets_finishing': budgets_finishing,
                                                'budgets_finished': budgets_finished})

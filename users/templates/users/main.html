@@ -14,25 +14,41 @@
                 </div><br>
             {% endfor %}
 
-            {% for budget in budgets %}
-                {{ budget.name }}
-            {% endfor %}
-        </p>
-        <p>
-        <h3>Your budgets are almost finished:</h3>
-            {% for budget in budgets_finishing %}
-                <div>
-                    <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
-                </div>
-            {% endfor %}
-        </p>
-        <p>
-        <h3>Your budgets are finished:</h3>
-            {% for budget in budgets_finished %}
-                <div>
-                    <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
-                </div>
-            {% endfor %}
         </p>
     </div>
+{% endblock %}
+
+{% block menu %}
+        <p>
+            <h2>Budgets:</h2>
+            <p>
+            {% if budgets_finishing %}
+                <p><strong>Almost finished:</strong></p>
+                {% for budget in budgets_finishing %}
+                    <div>
+                        <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                    </div><br>
+                {% endfor %}
+            {% endif %}
+
+            {% if budgets_finished %}
+                <p><strong>Finished:</strong></p>
+                {% for budget in budgets_finished %}
+                    <div>
+                        <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                    </div><br>
+                {% endfor %}
+            {% endif %}
+
+            {% if budgets %}
+                <p><strong>Running now:</strong></p>
+                {% for budget in budgets_running %}
+                    <div>
+                        <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No budget is running right now. You can create one <a href="{% url 'budgets:budget_create' %}"><b>here</b></a>.</p>
+            {% endif %}
+        </p>
 {% endblock %}

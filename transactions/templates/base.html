@@ -80,14 +80,28 @@
         {% endblock %}
     </section>
 </div>
+<script>
+  $(document).ready(function() {
+
+   var docHeight = $(window).height();
+   var footerHeight = $('#mainfooter').height();
+   var footerTop = $('#mainfooter').position().top + footerHeight;
+
+   if (footerTop < docHeight) {
+    $('#footerwrap').css('margin-top',  (docHeight - footerTop) + 'px');
+   }
+  });
+</script>
 <div id="footerwrap">
     <footer id="mainfooter" class="bodywidth clear">
         <nav class="clear">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Your Wallet</a></li>
-                <li><a href="#">Transactions</a></li>
-                <li><a href="#">Sitemap</a></li>
+                <li><<a href="{% url 'main' %}">Home</a></li>
+                <li><a href="{% url 'wallet:wallet_list' %}">Your Wallets</a></li>
+                <li><a href="{% url 'wallet:category_list' %}">Categories</a></li>
+                <li><a href="{% url 'wallet:transactions_list' %}">Transactions</a></li>
+                <li><a href="{% url 'budgets:budgets_list' %}">Budgets</a></li>
+                <li><a href="{% url 'budgets:savings_list' %}">Savings</a></li>
             </ul>
         </nav>
         <p class="copyright">Website Template By <a target="_blank" href="http://www.tristarwebdesign.co.uk/">Tristar</a> &amp; Modified By <a target="_blank" href="http://www.os-templates.com/">OS Templates</a></p>

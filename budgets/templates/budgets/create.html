@@ -10,4 +10,11 @@
         {% csrf_token %}
         <p><input type="submit" value="Create a budget"></p>
     </form>
+
+<script type="text/javascript">
+  $(function(){
+    $("#id_date_from").datepicker();
+    $("#id_date_to").datepicker();
+  });
+</script>
 {% endblock %}

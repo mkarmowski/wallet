@@ -10,4 +10,10 @@
         {% csrf_token %}
         <p><input type="submit" value="Create a saving"></p>
     </form>
+
+<script type="text/javascript">
+  $(function(){
+    $("#id_date_from").datepicker();
+  });
+</script>
 {% endblock %}

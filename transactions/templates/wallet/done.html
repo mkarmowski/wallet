@@ -4,5 +4,8 @@
 
 {% block content %}
     <h1>Wallet created!</h1>
-    <p>Your new wallet has been created.</p>
+    <p>Your new wallet has been created.
+        <p><a href="{% url 'wallet:wallet_create' %}">Create another wallet</a></p><br>
+        <p><a href="{% url 'wallet:wallet_list' %}">Go back to wallet list</a></p>
+    </p>
 {% endblock %}

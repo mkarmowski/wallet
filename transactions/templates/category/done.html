@@ -4,5 +4,8 @@
 
 {% block content %}
     <h1>Category created!</h1>
-    <p>New category has been created.</p>
+    <p>New category has been created.
+        <p><a href="{% url 'wallet:category_create' %}">Add another category</a></p><br>
+        <p><a href="{% url 'wallet:category_list' %}">Go back to category list</a></p>
+    </p>
 {% endblock %}

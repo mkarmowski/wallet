@@ -14,6 +14,24 @@
 <script src="js/html5.js"></script>
 <script src="js/IE9.js"></script>
 <![endif]-->
+<!-- date picker -->
+<link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/redmond/jquery-ui.css" rel="Stylesheet" />
+<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+<!-- -->
+<script>
+    $(document).ready(function() {
+        // messages timeout for 10 sec
+        setTimeout(function() {
+            $('.message').fadeOut('slow');
+        }, 10000); // <-- time in milliseconds, 1000 =  1 sec
+
+        // delete message
+        $('.del-msg').live('click',function(){
+            $('.del-msg').parent().attr('style', 'display:none;');
+        })
+    });
+</script>
 </head>
 <body>
 <div id="headerwrap">
@@ -33,9 +51,9 @@
                 <li>
                     {% if request.user.is_authenticated %}
                         Hello {{ request.user.first_name }},
-                            <a href="{% url "logout" %}">Logout</a>
+                            <a href="{% url 'logout' %}">Logout</a>
                     {% else %}
-                            <a href="{% url "login" %}">Log-in</a>
+                            <a href="{% url 'login' %}">Log-in</a>
                     {% endif %}
                 </li>
             </ul>
@@ -51,7 +69,7 @@
                     {% for message in messages %}
                         <li class="{{ message.tags }}">
                             {{ message|safe }}
-                                <a href="#" class="close">✖</a>
+                                <a href="#" class="del-msg">✖</a>
                         </li>
                     {% endfor %}
                 </ul>

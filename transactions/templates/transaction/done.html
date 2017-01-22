@@ -4,5 +4,8 @@
 
 {% block content %}
     <h1>Transaction created!</h1>
-    <p>New transaction has been created.</p>
+    <p>New transaction has been created.
+        <p><a href="{% url 'wallet:transaction_create' %}">Add another transaction</a></p><br>
+        <p><a href="{% url 'wallet:transactions_list' %}">Go back to transaction list</a></p>
+    </p>
 {% endblock %}

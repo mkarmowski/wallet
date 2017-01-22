@@ -4,5 +4,8 @@
 
 {% block content %}
     <h1>Saving created!</h1>
-    <p>New saving has been created.</p>
+    <p>New saving has been created.
+        <p><a href="{% url 'budgets:saving_create' %}">Create new saving</a></p><br>
+        <p><a href="{% url 'budgets:savings_list' %}">Go back to savings list</a></p>
+    </p>
 {% endblock %}

@@ -5,4 +5,8 @@
 {% block content %}
     <h1>Wallets</h1>
     <p>Welcome to the Wallets</p>
+    <p>
+        You can <a href="{% url 'login' %}">log-in here</a>.<br>
+        If you don't have an account you can <a href="{% url 'register' %}">create one here</a>.
+    </p>
 {% endblock %}

@@ -4,5 +4,8 @@
 
 {% block content %}
     <h1>Budget created!</h1>
-    <p>New budget has been created.</p>
+    <p>New budget has been created.
+        <p><a href="{% url 'budgets:budget_create' %}">Create new budget</a></p><br>
+        <p><a href="{% url 'budgets:budgets_list' %}">Go back to budget list</a></p>
+    </p>
 {% endblock %}

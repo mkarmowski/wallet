@@ -51,11 +51,13 @@ class Transaction(models.Model):
     wallet = models.ForeignKey(Wallet,
                                null=True,
                                blank=True,
-                               related_name='transactions')
+                               related_name='transactions',
+                               on_delete=models.DO_NOTHING)
     category = models.ForeignKey(Category,
                                  related_name='transactions',
                                  null=True,
-                                 blank=True)
+                                 blank=True,
+                                 on_delete=models.DO_NOTHING)
     budget = models.ForeignKey(Budget,
                                blank=True,
                                null=True,
@@ -64,7 +66,8 @@ class Transaction(models.Model):
     saving = models.ForeignKey(Saving,
                                blank=True,
                                null=True,
-                               default=None)
+                               default=None,
+                               on_delete=models.DO_NOTHING)
     date = models.DateField(verbose_name='Date of transaction',
                             default=django.utils.timezone.now())
     created = models.DateTimeField(auto_now_add=True)

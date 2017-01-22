@@ -16,9 +16,11 @@ def delete_transaction(sender, instance, using, **kwargs):
             & Q(date__lte=budget.date_to)
             & Q(category=budget.category))
 
-        if budget.budget_completion(transactions) >= 100:
+        completion = budget.budget_completion(transactions)
+        budget.completion = completion
+        if completion >= 100:
             budget.finished, budget.finishing = True, False
-        elif budget.budget_completion(transactions) >= 80:
+        elif completion >= 80:
             budget.finished, budget.finishing = False, True
         else:
             budget.finished, budget.finishing = False, False

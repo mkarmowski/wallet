@@ -27,6 +27,7 @@
                 {% for budget in budgets_finishing %}
                     <div>
                         <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                        Completed: {{ budget.completion|floatformat:'2' }}%
                     </div><br>
                 {% endfor %}
             {% endif %}
@@ -36,6 +37,7 @@
                 {% for budget in budgets_finished %}
                     <div>
                         <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                        Completed: {{ budget.completion|floatformat:'2' }}%
                     </div><br>
                 {% endfor %}
             {% endif %}
@@ -45,6 +47,7 @@
                 {% for budget in budgets_running %}
                     <div>
                         <strong><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></strong><br>
+                        Completed: {{ budget.completion|floatformat:'2' }}%
                     </div>
                 {% endfor %}
             {% else %}

@@ -8,13 +8,14 @@ class Budget(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # amount budget is set for
     user = models.ForeignKey(User, related_name='budgets')
-    wallet = models.ForeignKey('transactions.Wallet')
-    category = models.ForeignKey('transactions.Category')
-    date_from = models.DateField(default=django.utils.timezone.now())
+    wallet = models.ForeignKey('transactions.Wallet', on_delete=models.DO_NOTHING)
+    category = models.ForeignKey('transactions.Category', on_delete=models.DO_NOTHING)
+    date_from = models.DateField(default=django.utils.timezone.now(),)
     date_to = models.DateField(default=django.utils.timezone.now())
     finishing = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
+    completion = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     class Meta:
         ordering = ['date_from', 'date_to', ]

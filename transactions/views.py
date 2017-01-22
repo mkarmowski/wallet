@@ -163,18 +163,20 @@ def transaction_create(request):
                 if budget.category == new_transaction.category and budget.active is True:
                     new_transaction.budget = budget
                     new_transaction.save()
+                    completion = budget.budget_completion(transactions)
 
                 # check if the budget has reached limit:
-                    if budget.budget_completion(transactions) >= 100:
+                    if completion >= 100:
                         budget.finished, budget.finishing = True, False
                         messages.info(request,
                                       'You have reached the limit of your budget {}'
                                       .format(budget.name))
-                    elif budget.budget_completion(transactions) >= 80:
+                    elif completion >= 80:
                         budget.finishing = True
                         messages.info(request,
                                       'You are almost at the limit of your budget {}'
                                       .format(budget.name))
+                    budget.completion = completion
                     budget.save()
             messages.success(request, 'Transaction created')
             return render(request, 'transaction/done.html')

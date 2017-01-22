@@ -59,7 +59,8 @@ class Transaction(models.Model):
     budget = models.ForeignKey(Budget,
                                blank=True,
                                null=True,
-                               default=None)
+                               default=None,
+                               on_delete=models.DO_NOTHING)
     saving = models.ForeignKey(Saving,
                                blank=True,
                                null=True,

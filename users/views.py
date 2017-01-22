@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
-from budgets.models import Budget
+from budgets.models import Budget, Saving
 from transactions.models import Transaction
 from .forms import LoginForm, UserRegistrationForm
 
@@ -57,9 +57,11 @@ def main_view(request):
     budgets_running = budget_list.filter(finished=False)
     budgets_finishing = budget_list.filter(finishing=True)
     budgets_finished = budget_list.filter(finished=True)
+    savings_list = Saving.objects.filter(user=current_user, finished=False)
 
     return render(request, 'users/main.html', {'transactions': transactions,
                                                'budgets': budget_list,
                                                'budgets_running': budgets_running,
                                                'budgets_finishing': budgets_finishing,
-                                               'budgets_finished': budgets_finished})
+                                               'budgets_finished': budgets_finished,
+                                               'savings_list': savings_list})

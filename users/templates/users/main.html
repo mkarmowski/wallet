@@ -50,5 +50,21 @@
             {% else %}
                 <p>No budget is running right now. You can create one <a href="{% url 'budgets:budget_create' %}"><b>here</b></a>.</p>
             {% endif %}
+            </p>
+        </p><br><br>
+
+        <p>
+            <h2>Savings:</h2>
+            <p>
+            {% if savings_list %}
+                <p><strong>Running now:</strong></p>
+                {% for saving in savings_list %}
+                    <div>
+                        <strong><a href="{{ saving.get_absolute_url }}">{{ saving.name }}</a></strong><br>
+                        Completed: {{ saving.saving_completion|floatformat:'2' }}%
+                    </div><br>
+                {% endfor %}
+            {% endif %}
+            </p>
         </p>
 {% endblock %}

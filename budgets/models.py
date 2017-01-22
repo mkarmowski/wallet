@@ -6,7 +6,7 @@ from django.urls import reverse
 
 class Budget(models.Model):
     name = models.CharField(max_length=100, db_index=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # amount budget is set for
     user = models.ForeignKey(User, related_name='budgets')
     wallet = models.ForeignKey('transactions.Wallet')
     category = models.ForeignKey('transactions.Category')

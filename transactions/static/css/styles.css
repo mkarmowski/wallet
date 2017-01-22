@@ -5,7 +5,7 @@
 /* Reset */
 *{margin:0; padding:0;}
 img, img a{outline:none; border:none;}
-body{background-color:#fff; color:#575757; font:81.3% "Georgia",times,serif; margin:0; padding:0;}
+body{background-color:#f7f7f7; color:#575757; font:81.3% "Georgia",times,serif; margin:0; padding:0;}
 a, a:visited{outline:none; color:#4086c6; text-decoration:none;}
 a:hover{text-decoration:underline;}
 
@@ -271,7 +271,7 @@ input, textarea {
     clear:both;
     float:left;
     margin:0 0 0px;
-    background:#efefef;
+    background:#e3e3e3;
     border:0;
     padding:4px 10px;
     font-size:12px;
@@ -281,7 +281,7 @@ select {
     clear:both;
     float:left;
     margin:0 0 10px;
-    background:#efefef;
+    background:#e3e3e3;
     border:0;
     padding:4px 10px;
     font-size:12px;

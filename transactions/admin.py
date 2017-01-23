@@ -9,8 +9,8 @@ admin.site.register(Wallet, WalletAdmin)
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', ]
-    list_filter = ['name', ]
+    list_display = ['name', 'user', ]
+    list_filter = ['name', 'user', ]
 admin.site.register(Category, CategoryAdmin)
 
 

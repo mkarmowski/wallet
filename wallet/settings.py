@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'budgets',
     'pure_pagination',
     'django_filters',
+    'chartit',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

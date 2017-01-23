@@ -61,6 +61,7 @@ a.findoutmore:hover{background-color:#2f2f2f; background-image:none; text-shadow
 #aboutleft h3{font-size:1.5em; font-weight:bold; margin:0 0 15px 0;}
 #aboutleft h4{font-size:1.3em; font-weight:bold; margin:0 0 15px 0;}
 #aboutleft p{line-height:135%; margin:0 0 15px 0;}
+#all-width{float:left; width:1000px}
 #articlesright{float:right; width:380px;}
 #articlesright article{clear:both; margin:0 0 20px 0; overflow:hidden;}
 #articlesright figure{padding:5px; border:1px #dbdbdb solid; float:left; width:119px; height:119px; margin:0 15px 0 0;}

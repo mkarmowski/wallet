@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    {% load chartit %}
+    {{ chart|load_charts:"container" }}
+{% endblock %}
+
 {% block title %}Main page{% endblock %}
+
+{% block allwidth %}<div id='container'> Chart will be rendered here</div><br>{% endblock %}
 
 {% block content %}
     <h1>Wallets Dashboard</h1>
@@ -16,6 +23,7 @@
 
         </p>
     </div>
+
 {% endblock %}
 
 {% block menu %}

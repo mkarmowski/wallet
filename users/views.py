@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
 from budgets.models import Budget, Saving
+from transactions.charts import dashboard_chart
 from transactions.models import Transaction, Wallet
 from .forms import LoginForm, UserRegistrationForm
 
@@ -48,51 +49,6 @@ def user_login(request):
         form = LoginForm()
     return render(request, 'users/login.html', {'form': form})
 
-
-def chart(request):
-    user= request.user
-    ds = DataPool(
-            series=
-            [{'options': {
-                'source': Wallet.objects.filter(user=user)},
-                'terms': [
-                    'name',
-                    {'Wallet balance': 'balance'}]},
-            {'options': {
-                'source': Saving.objects.filter(user=user, finished=False)},
-                'terms': [
-                    {'saving_name': 'name'},
-                    {'Saving amount': 'current_amount'}]},
-            ])
-
-    cht = Chart(
-        datasource=ds,
-        series_options=
-        [{'options': {
-            'type': 'column',
-            'stacking': False},
-            'terms': {
-                'name': [
-                    'Wallet balance', ],
-                'saving_name':[
-                    'Saving amount'
-                ]
-            }}],
-        chart_options={
-            'chart':{
-                'backgroundColor': "#f7f7f7"},
-            'title':{
-                'text': 'Wallet balance and savings amount'},
-            'xAxis':{
-                'title':{
-                    'text': 'Name'}},
-            'yAxis':{
-                'title': {
-                    'text': 'Amount'}}
-        })
-    return cht
-
-
 @login_required
 def main_view(request):
     current_user = request.user
@@ -104,8 +60,7 @@ def main_view(request):
     budgets_finishing = budget_list.filter(finishing=True)
     budgets_finished = budget_list.filter(finished=True)
     savings_list = Saving.objects.filter(user=current_user, finished=False)
-
-    walletchart = chart(request)
+    dashboardchart = dashboard_chart(request)
 
     return render(request, 'users/main.html', {'transactions': transactions,
                                                'budgets': budget_list,
@@ -113,4 +68,4 @@ def main_view(request):
                                                'budgets_finishing': budgets_finishing,
                                                'budgets_finished': budgets_finished,
                                                'savings_list': savings_list,
-                                               'chart': walletchart})
+                                               'chart': dashboardchart})

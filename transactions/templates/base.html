@@ -63,7 +63,7 @@
 </div>
 <aside id="introduction" class="bodywidth clear">
     <div id="introleft">
-        <h2>Welcome to <span class="blue">Wallets</span></h2>
+        <p>{% block intro %}{% endblock %}</p>
         <p>
             {% if messages %}
                 <ul class="messages">
@@ -76,8 +76,7 @@
                 </ul>
             {% endif %}
         </p>
-        {% block intro %}
-        {% endblock %}
+
     </div>
     <!--
     <blockquote id="introquote">

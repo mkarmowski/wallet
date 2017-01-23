@@ -21,5 +21,4 @@ urlpatterns = [
     url(r'^export/csv/$', views.export_transactions_csv, name='export_transactions_csv'),
     url(r'^export/xls/$', views.export_transactions_xls, name='export_transactions_xls'),
     url(r'^transaction/filter/$', views.transaction_filter, name='transaction_filter'),
-    url(r'^transaction/chart/$', views.chart, name='chart'),
 ]

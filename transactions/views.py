@@ -2,8 +2,7 @@ import csv
 import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Count
-from django.db.models.functions import TruncMonth
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -11,9 +10,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-from chartit import DataPool, Chart
 
-from budgets.models import Budget, Saving
+from budgets.models import Budget
 from transactions.filters import TransactionFilter
 from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm
 from .models import Transaction, Category, Wallet
@@ -28,7 +26,6 @@ def wallet_list(request):
 
 @login_required
 def wallet_details(request, id):
-    user = request.user
     wallet = get_object_or_404(Wallet, id=id)
     transactions = Transaction.objects.filter(wallet=wallet)
     return render(request, 'wallet/detail.html', {'wallet': wallet,
@@ -79,7 +76,6 @@ def category_list(request):
 
 @login_required
 def category_details(request, id):
-    user = request.user
     category = get_object_or_404(Category, id=id)
     transactions = Transaction.objects.filter(category=category)
     return render(request, 'category/detail.html', {'category': category,
@@ -88,7 +84,6 @@ def category_details(request, id):
 
 @login_required
 def category_create(request):
-    user = request.user
     if request.method == 'POST':
         category_create_form = CategoryCreateForm(request.POST)
         if category_create_form.is_valid():
@@ -255,49 +250,3 @@ def export_transactions_xls(request):
 def transaction_filter(request):
     f = TransactionFilter(request.GET, queryset=Transaction.objects.filter(user=request.user))
     return render(request, 'transaction/filter.html', {'filter': f})
-
-
-def chart(request):
-    user= request.user
-    ds = DataPool(
-            series=
-            [{'options': {
-                'source': Wallet.objects.filter(user=user)},
-                'terms': [
-                    'name',
-                    {'Wallet balance': 'balance'}]},
-            {'options': {
-                'source': Saving.objects.filter(user=user, finished=False)},
-                'terms': [
-                    {'saving_name': 'name'},
-                    {'Saving amount': 'current_amount'}]},
-            ])
-
-    cht = Chart(
-        datasource=ds,
-        series_options=
-        [{'options': {
-            'type': 'column',
-            'stacking': False},
-            'terms': {
-                'name': [
-                    'Wallet balance', ],
-                'saving_name':[
-                    'Saving amount'
-                ]
-            }}],
-        chart_options={
-            'chart':{
-                'backgroundColor': "#f7f7f7"},
-            'title':{
-                'text': 'Wallet balance and savings amount'},
-            'xAxis':{
-                'title':{
-                    'text': 'Name'}},
-            'yAxis':{
-                'title': {
-                    'text': 'Amount'}}
-        })
-
-
-    return render(request, 'transaction/chart.html', {'chart': cht})

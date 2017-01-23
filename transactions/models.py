@@ -16,7 +16,7 @@ class Wallet(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     balance = models.DecimalField(default=0, max_digits=10, decimal_places=2)
     user = models.ForeignKey(User, related_name='wallets')
-    description = models.TextField(blank=True, max_length=500)
+    description = models.TextField(blank=True, null=True, max_length=500)
 
     class Meta:
         ordering = ('name', )
@@ -29,7 +29,7 @@ class Wallet(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, db_index=True, unique=True)
+    name = models.CharField(max_length=100, db_index=True)
     user = models.ForeignKey(User, related_name='categories')
 
     class Meta:

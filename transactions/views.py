@@ -163,9 +163,9 @@ def transaction_create(request):
                 if budget.category == new_transaction.category and budget.active is True:
                     new_transaction.budget = budget
                     new_transaction.save()
-                    completion = budget.budget_completion(transactions)
 
-                # check if the budget has reached limit:
+                    # check if the budget has reached limit:
+                    completion = budget.budget_completion(transactions)
                     if completion >= 100:
                         budget.finished, budget.finishing = True, False
                         messages.info(request,

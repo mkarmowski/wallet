@@ -121,7 +121,7 @@ class CategoryUpdate(UpdateView):
 @login_required
 def transaction_list(request):
     current_user = request.user
-    today = datetime.date.today().month
+
     if request.method == 'POST':
         change_month_form = TransactionChangeMonth(request.POST)
         if change_month_form.is_valid():
@@ -138,15 +138,17 @@ def transaction_list(request):
             transactions = p.page(page)
             return render(request, 'transaction/list.html',
                       {'transactions': transactions,
-                       'change_month': change_month_form})
+                       'change_month': change_month_form,
+                       'today': today})
     else:
-        change_month_form = TransactionChangeMonth()
+        change_month_form = TransactionChangeMonth(initial={'month': datetime.date.today().month+1})
+        today = datetime.date.today().month
         try:
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
             page = 1
 
-        objects = Transaction.objects.filter(user=current_user, date__month=today)
+        objects = Transaction.objects.filter(user=current_user, date__month=datetime.date.today().month)
         p = Paginator(objects, 10, request=request)
         transactions = p.page(page)
         return render(request, 'transaction/list.html',

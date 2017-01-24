@@ -2,12 +2,13 @@
 
 {% block title %}Your Savings{% endblock %}
 
+{% block intro %}<h2>Your Savings</h2>{% endblock %}
+
 {% block content %}
-    <h1>Your Savings</h1><br>
     <div class="saving-list">
         {% for saving in savings %}
             <div class="saving">
-                <a href="{{ saving.get_absolute_url }}">{{ saving.name }}</a>
+                <li><a href="{{ saving.get_absolute_url }}">{{ saving.name }}</a></li>
             </div><br>
         {% endfor %}
     </div>

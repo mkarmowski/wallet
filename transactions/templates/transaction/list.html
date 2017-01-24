@@ -2,9 +2,9 @@
 
 {% block title %}Your transactions{% endblock %}
 
+{% block intro %}<h2>Your Transactions</h2>{% endblock %}
+
 {% block content %}
-    <h1>Your Transactions</h1>
-    <p><a href="{% url 'wallet:transaction_filter' %}">Filter</a></p>
     <div class="transaction-list">
         {% for transaction in transactions.object_list %}
             <div class="transaction">

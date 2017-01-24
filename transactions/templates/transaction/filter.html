@@ -17,4 +17,11 @@
         {% endfor %}
         <a href="{% url 'wallet:export_transactions_csv' %}">Export all transactions as CSV</a><br>
     </p>
+
+<script type="text/javascript">
+  $(function(){
+    $("#id_date__gte").datepicker();
+    $("#id_date__lte").datepicker();
+  });
+</script>
 {% endblock %}

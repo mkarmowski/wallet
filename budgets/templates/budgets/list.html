@@ -2,12 +2,13 @@
 
 {% block title %}Your budgets{% endblock %}
 
+{% block intro %}<h2>Your Budgets</h2>{% endblock %}
+
 {% block content %}
-    <h1>Your Budgets</h1><br>
     <div class="budget-list">
         {% for budget in budgets %}
             <div class="budget">
-                <a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a>
+                <li><a href="{{ budget.get_absolute_url }}">{{ budget.name }}</a></li>
             </div><br>
         {% endfor %}
     </div>

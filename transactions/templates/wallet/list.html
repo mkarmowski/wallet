@@ -2,12 +2,13 @@
 
 {% block title %}Your wallets{% endblock %}
 
+{% block intro %}<h2>Your Wallets</h2>{% endblock %}
+
 {% block content %}
-    <h1>Your Wallets</h1><br>
     <div class="wallet-list">
         {% for wallet in wallets %}
             <div class="wallet">
-                <a href="{{ wallet.get_absolute_url }}">{{ wallet.name }}</a>
+                <li><a href="{{ wallet.get_absolute_url }}">{{ wallet.name }}</a></li>
             </div><br>
         {% endfor %}
     </div>

@@ -1,4 +1,5 @@
 import csv
+import datetime
 import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,7 +14,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from budgets.models import Budget
 from transactions.filters import TransactionFilter
-from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm
+from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm, TransactionChangeMonth
 from .models import Transaction, Category, Wallet
 
 
@@ -120,16 +121,37 @@ class CategoryUpdate(UpdateView):
 @login_required
 def transaction_list(request):
     current_user = request.user
-    try:
-        page = request.GET.get('page', 1)
-    except PageNotAnInteger:
-        page = 1
+    today = datetime.date.today().month
+    if request.method == 'POST':
+        change_month_form = TransactionChangeMonth(request.POST)
+        if change_month_form.is_valid():
+            cd = change_month_form.cleaned_data
+            current_user = request.user
+            today = cd['month']
+            try:
+                page = request.GET.get('page', 1)
+            except PageNotAnInteger:
+                page = 1
 
-    objects = Transaction.objects.filter(user=current_user)
-    p = Paginator(objects, 10, request=request)
-    transactions = p.page(page)
-    return render(request, 'transaction/list.html',
-                  {'transactions': transactions})
+            objects = Transaction.objects.filter(user=current_user, date__month=today)
+            p = Paginator(objects, 10, request=request)
+            transactions = p.page(page)
+            return render(request, 'transaction/list.html',
+                      {'transactions': transactions,
+                       'change_month': change_month_form})
+    else:
+        change_month_form = TransactionChangeMonth()
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        objects = Transaction.objects.filter(user=current_user, date__month=today)
+        p = Paginator(objects, 10, request=request)
+        transactions = p.page(page)
+        return render(request, 'transaction/list.html',
+                      {'transactions': transactions,
+                       'change_month': change_month_form})
 
 
 @login_required

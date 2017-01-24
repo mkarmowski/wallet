@@ -5,11 +5,17 @@
 {% block content %}
     <h1>Your Transactions</h1>
     <p><a href="{% url 'wallet:transaction_filter' %}">Filter</a></p>
+    <form action="." method="post">
+        {{ change_month.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Change month"></p>
+    </form>
     <div class="transaction-list">
         {% for transaction in transactions.object_list %}
             <div class="transaction">
                 <strong><a href="{{ transaction.get_absolute_url }}">{{ transaction.name }}</a></strong><br>
                 Wallet: {{ transaction.wallet }}<br>
+                Date: {{ transaction.date }}<br>
                 Amount: ${{ transaction.amount }}
             </div><br>
         {% endfor %}

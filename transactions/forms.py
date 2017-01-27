@@ -27,3 +27,11 @@ class TransactionCreateForm(forms.ModelForm):
         super(TransactionCreateForm, self).__init__(*args, **kwargs)
         self.fields['wallet'] = forms.ModelChoiceField(queryset=Wallet.objects.filter(user=user))
         self.fields['category'] = forms.ModelChoiceField(queryset=Category.objects.filter(user=user))
+
+
+class TransactionNextMonth(forms.Form):
+    month = forms.IntegerField(widget=forms.HiddenInput)
+
+
+class TransactionPrevMonth(forms.Form):
+    month = forms.IntegerField(widget=forms.HiddenInput)

@@ -1,10 +1,12 @@
 import csv
+import datetime
 import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
@@ -13,7 +15,8 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from budgets.models import Budget
 from transactions.filters import TransactionFilter
-from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm
+from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm, TransactionNextMonth, \
+    TransactionPrevMonth
 from .models import Transaction, Category, Wallet
 
 
@@ -118,18 +121,47 @@ class CategoryUpdate(UpdateView):
 
 
 @login_required
-def transaction_list(request):
+def transaction_list(request, **kwargs):
     current_user = request.user
-    try:
-        page = request.GET.get('page', 1)
-    except PageNotAnInteger:
-        page = 1
 
-    objects = Transaction.objects.filter(user=current_user)
-    p = Paginator(objects, 10, request=request)
-    transactions = p.page(page)
-    return render(request, 'transaction/list.html',
-                  {'transactions': transactions})
+    if request.method == 'POST':
+        next_month_form = TransactionNextMonth(request.POST)
+        previous_month_form = TransactionPrevMonth(request.POST)
+
+        if next_month_form.is_valid() and previous_month_form.is_valid():
+            cd_next = next_month_form.cleaned_data
+            cd_prev = previous_month_form.cleaned_data
+            request.session['next_month'] = cd_next['month']
+            request.session['prev_month'] = cd_prev['month']
+
+            return HttpResponseRedirect('/transactions/transaction/list/')
+
+    else:
+        if request.session.get('next_month') is not None:
+            next_month_form = TransactionNextMonth(
+                initial={'month': request.session.get('next_month')+1})
+            previous_month_form = TransactionPrevMonth(
+                initial={'month': request.session.get('prev_month') - 1})
+            objects = Transaction.objects.filter(user=current_user,
+                                                 date__month=request.session.get('next_month'))
+        else:
+            next_month_form = TransactionNextMonth(
+                initial={'month': datetime.date.today().month+1})
+            previous_month_form = TransactionPrevMonth(
+                initial={'month': datetime.date.today().month - 1})
+            objects = Transaction.objects.filter(user=current_user,
+                                                 date__month=datetime.date.today().month)
+
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+        p = Paginator(objects, 10, request=request)
+        transactions = p.page(page)
+        return render(request, 'transaction/list.html',
+                      {'transactions': transactions,
+                       'next_month_form': next_month_form,
+                       'prev_month_form': previous_month_form,})
 
 
 @login_required

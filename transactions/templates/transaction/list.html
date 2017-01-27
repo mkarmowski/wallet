@@ -6,7 +6,12 @@
     <h1>Your Transactions</h1>
     <p><a href="{% url 'wallet:transaction_filter' %}">Filter</a></p>
     <form action="." method="post">
-        {{ change_month.as_p }}
+        {{ prev_month_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Previous month"></p>
+    </form>
+    <form action="." method="post">
+        {{ next_month_form.as_p }}
         {% csrf_token %}
         <p><input type="submit" value="Next month"></p>
     </form>

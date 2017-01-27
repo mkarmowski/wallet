@@ -30,4 +30,8 @@ class TransactionCreateForm(forms.ModelForm):
 
 
 class TransactionNextMonth(forms.Form):
-    month = forms.IntegerField()
+    month = forms.IntegerField(widget=forms.HiddenInput)
+
+
+class TransactionPrevMonth(forms.Form):
+    month = forms.IntegerField(widget=forms.HiddenInput)

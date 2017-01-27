@@ -15,7 +15,8 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from budgets.models import Budget
 from transactions.filters import TransactionFilter
-from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm, TransactionNextMonth
+from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm, TransactionNextMonth, \
+    TransactionPrevMonth
 from .models import Transaction, Category, Wallet
 
 
@@ -122,28 +123,34 @@ class CategoryUpdate(UpdateView):
 @login_required
 def transaction_list(request, **kwargs):
     current_user = request.user
+
     if request.method == 'POST':
-        change_month_form = TransactionNextMonth(request.POST)
-        if change_month_form.is_valid():
-            cd = change_month_form.cleaned_data
-            request.session['month'] = cd['month']
-            # try:
-            #     page = request.GET.get('page', 1)
-            # except PageNotAnInteger:
-            #     page = 1
-            # objects = Transaction.objects.filter(user=current_user, date__month=cd['month'])
-            # p = Paginator(objects, 10, request=request)
-            # transactions = p.page(page)
-            request.session['month'] = cd['month']
+        next_month_form = TransactionNextMonth(request.POST)
+        previous_month_form = TransactionPrevMonth(request.POST)
+
+        if next_month_form.is_valid() and previous_month_form.is_valid():
+            cd_next = next_month_form.cleaned_data
+            cd_prev = previous_month_form.cleaned_data
+            request.session['next_month'] = cd_next['month']
+            request.session['prev_month'] = cd_prev['month']
+
             return HttpResponseRedirect('/transactions/transaction/list/')
 
     else:
-        if request.session.get('month') is not None:
-            change_month_form = TransactionNextMonth(initial={'month': request.session.get('month')+1})
-            objects = Transaction.objects.filter(user=current_user, date__month=request.session.get('month'))
+        if request.session.get('next_month') is not None:
+            next_month_form = TransactionNextMonth(
+                initial={'month': request.session.get('next_month')+1})
+            previous_month_form = TransactionPrevMonth(
+                initial={'month': request.session.get('prev_month') - 1})
+            objects = Transaction.objects.filter(user=current_user,
+                                                 date__month=request.session.get('next_month'))
         else:
-            change_month_form = TransactionNextMonth(initial={'month': datetime.date.today().month+1})
-            objects = Transaction.objects.filter(user=current_user, date__month=datetime.date.today().month)
+            next_month_form = TransactionNextMonth(
+                initial={'month': datetime.date.today().month+1})
+            previous_month_form = TransactionPrevMonth(
+                initial={'month': datetime.date.today().month - 1})
+            objects = Transaction.objects.filter(user=current_user,
+                                                 date__month=datetime.date.today().month)
 
         try:
             page = request.GET.get('page', 1)
@@ -153,7 +160,8 @@ def transaction_list(request, **kwargs):
         transactions = p.page(page)
         return render(request, 'transaction/list.html',
                       {'transactions': transactions,
-                       'change_month': change_month_form})
+                       'next_month_form': next_month_form,
+                       'prev_month_form': previous_month_form,})
 
 
 @login_required

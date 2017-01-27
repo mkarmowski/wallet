@@ -29,5 +29,5 @@ class TransactionCreateForm(forms.ModelForm):
         self.fields['category'] = forms.ModelChoiceField(queryset=Category.objects.filter(user=user))
 
 
-class TransactionChangeMonth(forms.Form):
+class TransactionNextMonth(forms.Form):
     month = forms.IntegerField()

@@ -5,8 +5,6 @@
 {% block intro %}<h2>Your Transactions</h2>{% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
-=======
     <h1>Your Transactions</h1>
     <p><a href="{% url 'wallet:transaction_filter' %}">Filter</a></p>
     <form action="." method="post">
@@ -19,7 +17,6 @@
         {% csrf_token %}
         <p><input type="submit" value="Next month"></p>
     </form>
->>>>>>> filtering
     <div class="transaction-list">
         {% for transaction in transactions.object_list %}
             <div class="transaction">

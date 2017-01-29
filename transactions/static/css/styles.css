@@ -255,6 +255,7 @@ ul.messages li a.close {
 /* forms */
 form {
     overflow:auto;
+    display:inline-block;
 }
 
 form p {

@@ -1,16 +1,17 @@
 import datetime
-from django.db.models import Q
-from django.http import HttpResponse
-from django.shortcuts import render
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models import Q
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 
 from budgets.models import Budget, Saving
 from transactions.charts import dashboard_chart
-from transactions.models import Transaction, Wallet
-from .forms import LoginForm, UserRegistrationForm
+from transactions.models import Transaction
 
-from chartit import DataPool, Chart
+from .forms import LoginForm, UserRegistrationForm
 
 
 def register(request):
@@ -48,6 +49,14 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'users/login.html', {'form': form})
+
+
+@login_required
+def user_details(request):
+    current_user = request.user
+    user = get_object_or_404(User, username=current_user.username)
+    return render(request, 'users/details.html', {'user': user})
+
 
 @login_required
 def main_view(request):

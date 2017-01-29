@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth import views as auth_views
-from . import views
 
+from . import views
 
 urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
@@ -16,4 +16,5 @@ urlpatterns = [
         name='password_reset_confirm'),
     url(r'^password-reset/complete/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^register/$', views.register, name='register'),
+    url(r'^details/$', views.user_details, name='user_details'),
 ]

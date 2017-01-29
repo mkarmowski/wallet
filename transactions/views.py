@@ -1,23 +1,24 @@
 import csv
 import datetime
+
 import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import DeleteView, UpdateView
-
-from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from pure_pagination import PageNotAnInteger, Paginator
 
 from budgets.models import Budget
 from transactions.filters import TransactionFilter
-from .forms import WalletCreateForm, TransactionCreateForm, CategoryCreateForm, TransactionNextMonth, \
-    TransactionPrevMonth
-from .models import Transaction, Category, Wallet
+
+from .forms import (CategoryCreateForm, TransactionCreateForm,
+                    TransactionNextMonth, TransactionPrevMonth,
+                    WalletCreateForm)
+from .models import Category, Transaction, Wallet
 
 
 @login_required
@@ -161,7 +162,7 @@ def transaction_list(request, **kwargs):
         return render(request, 'transaction/list.html',
                       {'transactions': transactions,
                        'next_month_form': next_month_form,
-                       'prev_month_form': previous_month_form,})
+                       'prev_month_form': previous_month_form})
 
 
 @login_required

@@ -1,5 +1,4 @@
-from chartit import Chart
-from chartit import DataPool
+from chartit import Chart, DataPool
 
 from budgets.models import Saving
 from transactions.models import Wallet

@@ -1,5 +1,6 @@
 from django import forms
-from .models import Wallet, Transaction, Category
+
+from .models import Category, Transaction, Wallet
 
 
 class WalletCreateForm(forms.ModelForm):

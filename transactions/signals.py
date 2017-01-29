@@ -3,8 +3,9 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.shortcuts import get_object_or_404
 
-from .models import Transaction
 from budgets.models import Budget
+
+from .models import Transaction
 
 
 @receiver(post_delete, sender=Transaction)

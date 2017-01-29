@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from . import views
 
+from . import views
 
 urlpatterns = [
     url(r'^wallet/list/$', views.wallet_list, name='wallet_list'),

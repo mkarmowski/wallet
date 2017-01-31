@@ -3,6 +3,14 @@ from django import forms
 from .models import Category, Transaction, Wallet
 
 
+RECURRING_CHOICES = (
+    ('daily', 'Daily'),
+    ('weekly', 'Weekly'),
+    ('monthly', 'Monthly'),
+    ('yearly', 'Yearly'),
+)
+
+
 class WalletCreateForm(forms.ModelForm):
     field_order = ['name', 'balance', 'description']
 
@@ -36,3 +44,9 @@ class TransactionNextMonth(forms.Form):
 
 class TransactionPrevMonth(forms.Form):
     month = forms.IntegerField(widget=forms.HiddenInput)
+
+
+class RecurringTransactionForm(forms.Form):
+    frequency = forms.ChoiceField(choices=RECURRING_CHOICES, required=True)
+    start_date = forms.DateField(required=True)
+    end_date = forms.DateField(required=False)

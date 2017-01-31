@@ -5,6 +5,7 @@ import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.forms import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
@@ -17,7 +18,7 @@ from transactions.filters import TransactionFilter
 
 from .forms import (CategoryCreateForm, TransactionCreateForm,
                     TransactionNextMonth, TransactionPrevMonth,
-                    WalletCreateForm)
+                    WalletCreateForm, RecurringTransactionForm)
 from .models import Category, Transaction, Wallet
 
 
@@ -283,3 +284,28 @@ def export_transactions_xls(request):
 def transaction_filter(request):
     f = TransactionFilter(request.GET, queryset=Transaction.objects.filter(user=request.user))
     return render(request, 'transaction/filter.html', {'filter': f})
+
+
+@login_required
+def recurring_transaction_create(request):
+    current_user = request.user
+
+    if request.method == 'POST':
+        transaction_form = TransactionCreateForm(current_user, request.POST, prefix='transaction')
+        recurring_form = RecurringTransactionForm(request.POST, prefix='recurring')
+
+        if transaction_form.is_valid() and recurring_form.is_valid():
+            new_transaction = transaction_form.save(commit=False)
+            new_transaction.user = current_user
+            wallet = get_object_or_404(Wallet, name=new_transaction.wallet)
+            new_transaction.wallet_balance_adjust(wallet, new_transaction)
+            new_transaction.save(), recurring_form.save()
+
+            messages.success(request, 'Recurring transaction created succesfully')
+            return render(request, 'transaction/recurring/done.html')
+    else:
+        transaction_form = TransactionCreateForm(current_user, prefix='transaction')
+        recurring_form = RecurringTransactionForm(prefix='recurring')
+    return render(request, 'transaction/recurring/create.html',
+                  {'transaction_form': transaction_form,
+                   'recurring_form': recurring_form})

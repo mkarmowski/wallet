@@ -34,7 +34,8 @@
 
 {% block menu %}
     <div>
-        <a href="{% url 'wallet:transaction_create' %}">Create new transaction</a>
+        <a href="{% url 'wallet:transaction_create' %}">Create new transaction</a><br>
+        <a href="{% url 'wallet:recurring_create' %}">Create recurring transaction</a>
     </div><br>
     <div><a href="{% url 'wallet:transaction_filter' %}">Filter transactions</a></div><br>
     <div>

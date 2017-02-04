@@ -1,17 +1,14 @@
 import os
 
 from celery import Celery
+from django.conf import settings
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wallet.settings')
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
+app = Celery('wallet')
 
-app = Celery('wallet',
-             broker='amqp://',
-             backend='amqp://',
-             include=['wallet/transactions/tasks'])
-
-app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks()
+app.config_from_object('django.conf:settings')
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
 if __name__ == '__main__':

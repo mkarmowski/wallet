@@ -1,11 +1,10 @@
 import csv
 import datetime
-
 import xlwt
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.forms import formset_factory
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
@@ -19,7 +18,7 @@ from transactions.filters import TransactionFilter
 from .forms import (CategoryCreateForm, TransactionCreateForm,
                     TransactionNextMonth, TransactionPrevMonth,
                     WalletCreateForm, RecurringTransactionForm)
-from .models import Category, Transaction, Wallet
+from .models import Category, Transaction, Wallet, TaskScheduler
 
 
 @login_required
@@ -299,7 +298,32 @@ def recurring_transaction_create(request):
             new_transaction.user = current_user
             wallet = get_object_or_404(Wallet, name=new_transaction.wallet)
             new_transaction.wallet_balance_adjust(wallet, new_transaction)
-            new_transaction.save(), recurring_form.save()
+            new_transaction.save()
+
+            cd_recurring = recurring_form.cleaned_data
+            if cd_recurring['frequency'] == 'weekly':
+                week_day = cd_recurring['start_date'].week_day
+                recurring_transaction = TaskScheduler.schedule_every(new_transaction.name,
+                                                                     0,
+                                                                     12,
+                                                                     week_day)
+            if cd_recurring['frequency'] == 'monthly' or cd_recurring['frequency'] == 'daily':
+                month_day = cd_recurring['start_date'].day
+                recurring_transaction = TaskScheduler.schedule_every_month(new_transaction.name,
+                                                                     0,
+                                                                     12,
+                                                                     month_day)
+            if cd_recurring['frequency'] == 'yearly':
+                month = cd_recurring['start_date'].month
+                recurring_transaction = TaskScheduler.schedule_every(new_transaction.name,
+                                                                     0,
+                                                                     12,
+                                                                     month)
+
+
+            recurring_transaction.start()
+
+
 
             messages.success(request, 'Recurring transaction created succesfully')
             return render(request, 'transaction/recurring/done.html')

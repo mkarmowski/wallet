@@ -1,8 +1,10 @@
 import django.utils.timezone
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
+from djcelery.models import PeriodicTask, IntervalSchedule, CrontabSchedule
 
 from budgets.models import Budget, Saving
 
@@ -91,3 +93,100 @@ class Transaction(models.Model):
         else:
             wallet.balance += transaction.amount
             return wallet.save()
+
+
+# class TaskScheduler(models.Model):
+#     periodic_task = models.ForeignKey(PeriodicTask)
+#
+#     @staticmethod
+#     def schedule_every(task_name, minute=None, hour=None, day_of_week=None, day_of_month=None, month_of_year=None, args=None, kwargs=None):
+#         # permissible_periods = ['days', 'hours', 'minutes', 'seconds']
+#         # if period not in permissible_periods:
+#         #     raise Exception('Invalid period specified')
+#
+#         # create periodic task and interval
+#         ptask_name = '{}_{}'.format(task_name, datetime.now())
+#         crontab_schedules = CrontabSchedule.objects.filter(minute=minute,
+#                                                            hour=hour,
+#                                                            day_of_week=day_of_week,
+#                                                            day_of_month=day_of_month,
+#                                                            month_of_year=month_of_year)
+#         if crontab_schedules:
+#             crontab_schedule = crontab_schedules[0]
+#         else:
+#             crontab_schedule = CrontabSchedule()
+#             crontab_schedule.minute = minute
+#             crontab_schedule.hour = hour
+#             crontab_schedule.day_of_week = day_of_week
+#             crontab_schedule.day_of_month = day_of_month
+#             crontab_schedule.month_of_year = month_of_year
+#             crontab_schedule.save()
+#         ptask = PeriodicTask(name=ptask_name, task=task_name, crontab=crontab_schedule)
+#         if args:
+#             ptask.args = args
+#         if kwargs:
+#             ptask.kwargs = kwargs
+#         ptask.save()
+#         return TaskScheduler.objects.create(periodic_task=ptask)
+#
+#     def stop(self):
+#         """pause the task"""
+#         ptask = self.periodic_task
+#         ptask.enabled = False
+#         ptask.save()
+#
+#     def start(self):
+#         """start the task"""
+#         ptask = self.periodic_task
+#         ptask.enabled = True
+#         ptask.save()
+#
+#     def terminate(self):
+#         self.stop()
+#         ptask = self.periodic_task
+#         self.delete()
+#         ptask.delete()
+
+
+class TaskScheduler(models.Model):
+    periodic_task = models.ForeignKey(PeriodicTask)
+
+    @staticmethod
+    def schedule_every_month(task_name, minute, hour, day_of_month, args=None, kwargs=None):
+        ptask_name = '{}_{}'.format(task_name, datetime.now())
+        crontab_schedules = CrontabSchedule.objects.filter(minute=minute,
+                                                           hour=hour,
+                                                           day_of_month=day_of_month,)
+        if crontab_schedules:
+            crontab_schedule = crontab_schedules[0]
+        else:
+            crontab_schedule = CrontabSchedule()
+            crontab_schedule.minute = minute
+            crontab_schedule.hour = hour
+            crontab_schedule.day_of_month = day_of_month
+            crontab_schedule.save()
+        ptask = PeriodicTask(name=ptask_name, task=task_name, crontab=crontab_schedule)
+        if args:
+            ptask.args = args
+        if kwargs:
+            ptask.kwargs = kwargs
+        ptask.save()
+        return TaskScheduler.objects.create(periodic_task=ptask)
+
+    def stop(self):
+        """pause the task"""
+        ptask = self.periodic_task
+        ptask.enabled = False
+        ptask.save()
+
+    def start(self):
+        """start the task"""
+        ptask = self.periodic_task
+        ptask.enabled = True
+        ptask.save()
+
+    def terminate(self):
+        self.stop()
+        ptask = self.periodic_task
+        self.delete()
+        ptask.delete()

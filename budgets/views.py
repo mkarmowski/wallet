@@ -130,6 +130,7 @@ class SavingUpdate(UpdateView):
         return super(SavingUpdate, self).dispatch(*args, **kwargs)
 
 
+@login_required
 def saving_deposit(request, pk):
     current_user = request.user
     if request.method == 'POST':
@@ -160,6 +161,7 @@ def saving_deposit(request, pk):
                   {'deposit_form': saving_deposit_form})
 
 
+@login_required
 def saving_withdraw(request, pk):
     current_user = request.user
     if request.method == 'POST':

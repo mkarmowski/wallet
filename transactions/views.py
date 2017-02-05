@@ -237,6 +237,7 @@ class TransactionUpdate(UpdateView):
         return super(TransactionUpdate, self).dispatch(*args, **kwargs)
 
 
+@login_required
 def export_transactions_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="transactions.csv"'
@@ -251,6 +252,7 @@ def export_transactions_csv(request):
     return response
 
 
+@login_required
 def export_transactions_xls(request):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="transactions.xls"'
@@ -280,6 +282,7 @@ def export_transactions_xls(request):
     return response
 
 
+@login_required
 def transaction_filter(request):
     f = TransactionFilter(request.GET, queryset=Transaction.objects.filter(user=request.user))
     return render(request, 'transaction/filter.html', {'filter': f})

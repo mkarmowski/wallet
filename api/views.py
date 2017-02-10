@@ -1,11 +1,25 @@
 from rest_framework import generics, mixins
 from rest_framework.authentication import BasicAuthentication
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from budgets.models import Budget, Saving
 from transactions.models import Wallet, Category, Transaction
 from .serializers import WalletSerializer, CategorySerializer, TransactionSerializer, \
     BudgetSerializer, SavingSerializer
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'wallets': reverse('api:wallet_list', request=request, format=format),
+        'categories': reverse('api:category_list', request=request, format=format),
+        'transactions': reverse('api:transaction_list', request=request, format=format),
+        'budgets': reverse('api:budget_list', request=request, format=format),
+        'savings': reverse('api:saving_list', request=request, format=format),
+    })
 
 
 class ListView(mixins.ListModelMixin,

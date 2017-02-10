@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^budgets/(?P<pk>\d+)/$', views.BudgetDetailView.as_view(), name='budget_details'),
     url(r'^savings/$', views.SavingListView.as_view(), name='saving_list'),
     url(r'^savings/(?P<pk>\d+)/$', views.SavingDetailView.as_view(), name='saving_details'),
+    url(r'^$', views.api_root),
 ]

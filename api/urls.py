@@ -3,6 +3,8 @@ from . import views
 
 
 urlpatterns = [
+    url(r'^users/$', views.UserListView.as_view(), name='users_list'),
+    url(r'^users/(?P<pk>\d+)/$', views.UserDetailView.as_view(), name='user_details'),
     url(r'^wallets/$', views.WalletListView.as_view(), name='wallet_list'),
     url(r'^wallets/(?P<pk>\d+)/$', views.WalletDetailView.as_view(), name='wallet_details'),
     url(r'^categories/$', views.CategoryListView.as_view(), name='category_list'),

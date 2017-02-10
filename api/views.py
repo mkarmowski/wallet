@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import generics, mixins
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.decorators import api_view
@@ -8,12 +9,13 @@ from rest_framework.reverse import reverse
 from budgets.models import Budget, Saving
 from transactions.models import Wallet, Category, Transaction
 from .serializers import WalletSerializer, CategorySerializer, TransactionSerializer, \
-    BudgetSerializer, SavingSerializer
+    BudgetSerializer, SavingSerializer, UserSerializer
 
 
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
+        'users': reverse('api:users_list', request=request, format=format),
         'wallets': reverse('api:wallet_list', request=request, format=format),
         'categories': reverse('api:category_list', request=request, format=format),
         'transactions': reverse('api:transaction_list', request=request, format=format),
@@ -51,6 +53,16 @@ class DetailView(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class UserListView(ListView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+class UserDetailView(DetailView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
 
 class WalletListView(ListView):

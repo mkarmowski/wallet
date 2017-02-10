@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^transactions/', include('transactions.urls', namespace='wallet')),
     url(r'^budgets/', include('budgets.urls', namespace='budgets')),
     url(r'^users/', include('users.urls')),
+    url(r'^api/', include('api.urls', namespace='api')),
     url(r'^$', TemplateView.as_view(template_name='users/index.html')),
 ]

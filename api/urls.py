@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^users/$', views.UserListView.as_view(), name='users_list'),
+    url(r'^users/$', views.UserListView.as_view(), name='user_list'),
     url(r'^users/(?P<pk>\d+)/$', views.UserDetailView.as_view(), name='user_details'),
     url(r'^wallets/$', views.WalletListView.as_view(), name='wallet_list'),
     url(r'^wallets/(?P<pk>\d+)/$', views.WalletDetailView.as_view(), name='wallet_details'),
@@ -15,5 +15,5 @@ urlpatterns = [
     url(r'^budgets/(?P<pk>\d+)/$', views.BudgetDetailView.as_view(), name='budget_details'),
     url(r'^savings/$', views.SavingListView.as_view(), name='saving_list'),
     url(r'^savings/(?P<pk>\d+)/$', views.SavingDetailView.as_view(), name='saving_details'),
-    url(r'^$', views.api_root),
+    url(r'^$', views.api_root, name='api_root'),
 ]

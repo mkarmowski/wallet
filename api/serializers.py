@@ -6,7 +6,7 @@ from transactions.models import Wallet, Category, Transaction
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=True)
+    # id = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False, queryset=User.objects.all())
 
     class Meta:
         model = User
@@ -14,7 +14,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class WalletSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=True)
+    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False, queryset=User.objects.all())
 
     class Meta:
         model = Wallet
@@ -22,7 +22,7 @@ class WalletSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=True)
+    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False, queryset=User.objects.all())
 
     class Meta:
         model = Category

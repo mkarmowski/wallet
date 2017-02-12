@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_filters',
     'chartit',
     'rest_framework',
+    'rest_framework.authtoken',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

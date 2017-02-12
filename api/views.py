@@ -15,7 +15,7 @@ from .serializers import WalletSerializer, CategorySerializer, TransactionSerial
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'users': reverse('api:users_list', request=request, format=format),
+        'users': reverse('api:user_list', request=request, format=format),
         'wallets': reverse('api:wallet_list', request=request, format=format),
         'categories': reverse('api:category_list', request=request, format=format),
         'transactions': reverse('api:transaction_list', request=request, format=format),

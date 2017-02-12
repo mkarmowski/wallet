@@ -14,7 +14,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class WalletSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False, queryset=User.objects.all())
+    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False,
+                                               queryset=User.objects.all())
 
     class Meta:
         model = Wallet
@@ -22,7 +23,8 @@ class WalletSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False, queryset=User.objects.all())
+    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False,
+                                               queryset=User.objects.all())
 
     class Meta:
         model = Category
@@ -51,7 +53,8 @@ class SavingSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     wallet = serializers.HyperlinkedRelatedField(view_name='api:wallet_details', read_only=True)
     category = serializers.HyperlinkedRelatedField(view_name='api:category_details', read_only=True)
-    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=True)
+    user = serializers.HyperlinkedRelatedField(view_name='api:user_details', read_only=False,
+                                               queryset=User.objects.all())
     budget = serializers.HyperlinkedRelatedField(view_name='api:budget_details', read_only=True)
     saving = serializers.HyperlinkedRelatedField(view_name='api:saving_details', read_only=True)
 

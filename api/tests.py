@@ -5,7 +5,8 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from api.serializers import UserSerializer
+from api.serializers import UserSerializer, WalletSerializer
+from transactions.models import Wallet
 
 
 class LoginTest(APITestCase):
@@ -95,3 +96,28 @@ class CreateWalletTest(APITestCase):
         data = {'name': 'test_wallet', 'balance': 1000, 'user': user_id, 'description': 'test'}
         response = self.client.post(url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetUpdateAndDeleteWalletTest(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'password')
+        self.client.force_authenticate(self.user)
+        self.user_id = reverse('api:user_details', args=(self.user.id,))
+        self.wallet = Wallet.objects.create(name='test_wallet', balance=10,
+                                            user=self.user, description='test')
+        # self.data = WalletSerializer(self.wallet).data
+        # self.data({'name': 'Changed'})
+        self.url = reverse('api:wallet_details', args=(self.wallet.id,))
+
+    def test_get_wallet(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_wallet(self):
+        data = {'name': 'Changed', 'user': self.user_id}
+        response = self.client.put(self.url, data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_wallet(self):
+        response = self.client.delete(self.url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

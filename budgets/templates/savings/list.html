@@ -8,7 +8,10 @@
     <div class="saving-list">
         {% for saving in savings %}
             <div class="saving">
-                <li><a href="{{ saving.get_absolute_url }}">{{ saving.name }}</a></li>
+                <li>
+                    <a href="{{ saving.get_absolute_url }}">{{ saving.name }}</a> - Completed: {{ saving.saving_completion|floatformat:'1' }}%
+                    (<a href="{% url 'budgets:saving_deposit' pk=saving.id %}">Deposit</a> / <a href="{% url 'budgets:saving_withdraw' pk=saving.id %}">Withdraw</a>)
+                </li>
             </div><br>
         {% endfor %}
     </div>

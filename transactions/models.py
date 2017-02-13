@@ -69,7 +69,7 @@ class Transaction(models.Model):
                                default=None,
                                on_delete=models.DO_NOTHING)
     date = models.DateField(verbose_name='Date of transaction',
-                            default=django.utils.timezone.now())
+                            default=django.utils.timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])

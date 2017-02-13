@@ -94,7 +94,7 @@ def saving_create(request):
         saving_create_form = SavingCreateForm(request.POST)
         if saving_create_form.is_valid():
             try:
-                categories = Category.objects.get(name='Savings')
+                categories = Category.objects.get(name='Savings', user=current_user.id)
             except ObjectDoesNotExist:
                 saving_category = Category(name='Savings', user=current_user)
                 saving_category.save()

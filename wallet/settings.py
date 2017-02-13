@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': 'wallet_db',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',   
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -137,7 +137,7 @@ STATIC_URL = '/static/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'transactions/static/images/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'transactions/media/images/')
 
 LOGIN_REDIRECT_URL = reverse_lazy('main')
 LOGIN_URL = reverse_lazy('login')

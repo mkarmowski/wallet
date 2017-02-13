@@ -53,9 +53,7 @@ def user_login(request):
 
 @login_required
 def user_details(request):
-    current_user = request.user
-    user = get_object_or_404(User, username=current_user.username)
-    return render(request, 'users/details.html', {'user': user})
+    return render(request, 'users/details.html', {'user': request.user})
 
 
 @login_required

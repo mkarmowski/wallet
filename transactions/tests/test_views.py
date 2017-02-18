@@ -108,5 +108,9 @@ class WalletFormsTest(TestCase):
         form_data = {'name': 'TestWallet2', 'balance': 100, 'description': 'test'}
         response = self.client.post(url, form_data)
         self.assertEqual(response.status_code, 200)
+        test_wallet = Wallet.objects.get(name='TestWallet2')
+        self.assertEqual(test_wallet.name, 'TestWallet2')
+        self.assertEqual(test_wallet.balance, 100)
+        self.assertEqual(test_wallet.description, 'test')
 
 

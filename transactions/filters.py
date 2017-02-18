@@ -13,3 +13,8 @@ class TransactionFilter(django_filters.FilterSet):
             'date': ['gte', 'lte'],
             'amount': ['gte', 'lte'],
         }
+
+    # @property
+    # def qs(self):
+    #     parent = super(TransactionFilter, self).qs
+    #     return parent.filter(user=request.user)
